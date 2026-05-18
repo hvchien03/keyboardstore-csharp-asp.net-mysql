@@ -1,0 +1,19 @@
+# Build output
+bin/
+obj/
+artifacts/
+
+# Logs and runtime files
+Logs/
+*.log
+
+# Local secrets/config
+appsettings.Local.json
+*.user
+
+# IDE
+.vs/
+.vscode/
+
+# Generated project cache
+*.lscache

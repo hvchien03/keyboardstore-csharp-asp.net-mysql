@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #2196F3; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        .total { font-size: 18px; font-weight: bold; color: #2196F3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Đơn hàng #{{OrderId}} đã được xác nhận! ✅</h1>
+        </div>
+        <div class="content">
+            <p>Xin chào <strong>{{UserEmail}}</strong>,</p>
+            <p>Cảm ơn bạn đã đặt hàng tại Keyboard Store!</p>
+            
+            <h3>Thông tin đơn hàng:</h3>
+            <table>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                </tr>
+                {{OrderItems}}
+                <tr>
+                    <td colspan="2"><strong>Tổng cộng:</strong></td>
+                    <td class="total">{{TotalAmount}} VNĐ</td>
+                </tr>
+            </table>
+            
+            <p><strong>Trạng thái:</strong> {{OrderStatus}}</p>
+            <p><strong>Thanh toán:</strong> {{PaymentMethod}}</p>
+        </div>
+    </div>
+</body>
+</html>
