@@ -17,3 +17,8 @@ appsettings.Local.json
 
 # Generated project cache
 *.lscache
+
+# Local notes / AI workflow docs
+AI_CODING_GUIDE.md
+Flow_WebApi
+Flow_wepApi
