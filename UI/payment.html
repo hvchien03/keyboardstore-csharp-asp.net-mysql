@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html class="light" lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Giỏ hàng &amp; Thanh toán - Keyframe Engineering</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#00497c",
+                        "secondary": "#5f5e5e",
+                        "tertiary-fixed-dim": "#9dcaff",
+                        "surface-tint": "#a23f00",
+                        "primary-fixed-dim": "#ffb595",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed": "#001d35",
+                        "surface-bright": "#f9f9f9",
+                        "surface-white": "#FFFFFF",
+                        "surface-dim": "#dadada",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#636262",
+                        "outline-variant": "#e3bfb1",
+                        "border-subtle": "#E0E0E0",
+                        "tertiary-fixed": "#d1e4ff",
+                        "surface-container": "#eeeeee",
+                        "inverse-primary": "#ffb595",
+                        "on-surface-variant": "#5a4136",
+                        "tertiary": "#0061a2",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1c1c",
+                        "secondary-fixed": "#e5e2e1",
+                        "outline": "#8e7164",
+                        "secondary-container": "#e2dfde",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "inverse-surface": "#2f3131",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "success-green": "#28A745",
+                        "on-primary-container": "#561e00",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#7c2e00",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#474746",
+                        "primary-container": "#ff6700",
+                        "primary-fixed": "#ffdbcd",
+                        "primary": "#a23f00",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "tertiary-container": "#019cff",
+                        "on-tertiary-container": "#003156",
+                        "text-muted": "#757575",
+                        "surface-container-low": "#f3f3f3",
+                        "on-error": "#ffffff",
+                        "background": "#f9f9f9",
+                        "on-primary-fixed": "#351000",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "inverse-on-surface": "#f1f1f1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "section-padding": "80px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <nav
+        class="sticky top-0 z-50 flex justify-between items-center w-full px-8 py-4 max-w-[1440px] mx-auto bg-surface-white/95 backdrop-blur-md shadow-sm dark:shadow-none border-b border-border-subtle dark:border-outline-variant">
+        <a class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight"
+            href="#">KEYFRAME</a>
+        <div class="hidden md:flex space-x-8"><a
+                class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Trang Chᜳ</a><a
+                class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Custom Keyboards</a><a
+                class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Switches</a><a
+                class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Keycaps</a><a
+                class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Accessories</a></div>
+        <div class="flex items-center space-x-6 text-primary dark:text-primary-fixed"><button aria-label="Search"
+                class="hover:scale-95 transition-transform duration-150 cursor-pointer"><span
+                    class="material-symbols-outlined" data-icon="search">search</span></button><button
+                aria-label="Profile" class="hover:scale-95 transition-transform duration-150 cursor-pointer"><span
+                    class="material-symbols-outlined" data-icon="person">person</span></button><button aria-label="Cart"
+                class="hover:scale-95 transition-transform duration-150 cursor-pointer relative"><span
+                    class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span><span
+                    class="absolute -top-1 -right-1 bg-primary-container text-on-primary font-label-sm text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span></button>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-[1200px] mx-auto px-4 md:px-8 py-10 md:py-16">
+        <h1 class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg mb-10">Thanh toán
+        </h1>
+        <div class="flex flex-col lg:flex-row gap-gutter">
+            <!-- Left Column: Checkout Form -->
+            <div class="w-full lg:w-2/3 space-y-8">
+                <!-- Shipping Info -->
+                <section
+                    class="bg-surface-white p-6 md:p-8 rounded-lg border border-border-subtle shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+                    <h2 class="text-headline-md font-headline-md mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary"
+                            data-icon="local_shipping">local_shipping</span>
+                        Thông tin giao hàng
+                    </h2>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col">
+                                <label class="text-label-bold font-label-bold text-on-surface mb-2" for="fullname">Họ và
+                                    tên</label>
+                                <input
+                                    class="px-4 py-3 bg-surface-white border border-border-subtle rounded-lg text-body-md font-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors"
+                                    id="fullname" placeholder="Nhập họ và tên" type="text">
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="text-label-bold font-label-bold text-on-surface mb-2" for="phone">Số điện
+                                    thoại</label>
+                                <input
+                                    class="px-4 py-3 bg-surface-white border border-border-subtle rounded-lg text-body-md font-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors"
+                                    id="phone" placeholder="Nhập số điện thoại" type="tel">
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-label-bold font-label-bold text-on-surface mb-2" for="address">Địa chỉ
+                                chi tiết</label>
+                            <input
+                                class="px-4 py-3 bg-surface-white border border-border-subtle rounded-lg text-body-md font-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors"
+                                id="address" placeholder="Số nhà, tên đường, phường/xã..." type="text">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col">
+                                <label class="text-label-bold font-label-bold text-on-surface mb-2" for="city">Tỉnh /
+                                    Thành phố</label>
+                                <select
+                                    class="px-4 py-3 bg-surface-white border border-border-subtle rounded-lg text-body-md font-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors appearance-none"
+                                    id="city">
+                                    <option disabled="" selected="" value="">Chọn Tỉnh/Thành phố</option>
+                                    <option value="hcm">Hồ Chí Minh</option>
+                                    <option value="hn">Hà Nội</option>
+                                    <option value="dn">Đà Nẵng</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="text-label-bold font-label-bold text-on-surface mb-2" for="district">Quận
+                                    / Huyện</label>
+                                <select
+                                    class="px-4 py-3 bg-surface-white border border-border-subtle rounded-lg text-body-md font-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors appearance-none"
+                                    id="district">
+                                    <option disabled="" selected="" value="">Chọn Quận/Huyện</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <!-- Payment Method -->
+                <section
+                    class="bg-surface-white p-6 md:p-8 rounded-lg border border-border-subtle shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+                    <h2 class="text-headline-md font-headline-md mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary" data-icon="payments">payments</span>
+                        Phương thức thanh toán
+                    </h2>
+                    <div class="space-y-3">
+                        <label
+                            class="flex items-center p-4 border border-border-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors relative">
+                            <input checked=""
+                                class="w-5 h-5 text-primary-container focus:ring-primary-container border-border-subtle"
+                                name="payment" type="radio" value="cod">
+                            <span class="ml-3 text-body-md font-body-md text-on-surface font-medium">Thanh toán khi nhận
+                                hàng (COD)</span>
+                        </label>
+                        <label
+                            class="flex items-center p-4 border border-border-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors relative">
+                            <input
+                                class="w-5 h-5 text-primary-container focus:ring-primary-container border-border-subtle"
+                                name="payment" type="radio" value="momo">
+                            <span class="ml-3 text-body-md font-body-md text-on-surface font-medium">Ví MoMo</span>
+                            <span class="material-symbols-outlined absolute right-4 text-text-muted"
+                                data-icon="account_balance_wallet">account_balance_wallet</span>
+                        </label>
+                        <label
+                            class="flex items-center p-4 border border-border-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors relative">
+                            <input
+                                class="w-5 h-5 text-primary-container focus:ring-primary-container border-border-subtle"
+                                name="payment" type="radio" value="bank">
+                            <span class="ml-3 text-body-md font-body-md text-on-surface font-medium">Chuyển khoản ngân
+                                hàng</span>
+                            <span class="material-symbols-outlined absolute right-4 text-text-muted"
+                                data-icon="account_balance">account_balance</span>
+                        </label>
+                    </div>
+                </section>
+            </div>
+            <!-- Right Column: Order Summary (Cart) -->
+            <div class="w-full lg:w-1/3">
+                <div
+                    class="bg-surface-white p-6 md:p-8 rounded-lg border border-border-subtle shadow-[0_4px_20px_rgba(0,0,0,0.05)] sticky top-24">
+                    <h2 class="text-headline-md font-headline-md mb-6 border-b border-border-subtle pb-4">Tóm tắt đơn
+                        hàng</h2>
+                    <!-- Cart Items -->
+                    <div class="space-y-4 mb-6">
+                        <!-- Item 1 -->
+                        <div class="flex gap-4 items-center">
+                            <div class="w-20 h-20 bg-surface-container rounded-md overflow-hidden flex-shrink-0">
+                                <img alt="Mechanical Keyboard Image" class="w-full h-full object-cover"
+                                    data-alt="A close-up, high-quality product photo of a premium, minimalist mechanical keyboard with pristine white keycaps and a subtle brushed aluminum case. The lighting is studio-quality, high-key white light that emphasizes the texture of the PBT keycaps and the clean lines of the hardware. The background is a pure white, sterile surface, creating a gallery-like, tech-focused aesthetic. The mood is precise, engineered, and modern."
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrSWerw_ZY-74QMLTyZ5oDOIgjgyNW791jsIGEr8b-tvaK46NhF7dhk6GjP-hGiiMwASYi946_-ZBeL6J9Ecfy-jWK-Xu9bxO2ACIXMmsHDKIcyAPy5FOxlrLk_xmaEMlXlbdiaZ2FJ5be9gnBy2z_hFfgEeb4wISKQls2j2alH_y6bXUSMtGWdXZ7v8luu3pVzfBAgKZTxQzYKqmuCaZ0tWuZfB-GfDe-g7nT1OZ0B_gaUcN0xUdPpwjko4vremtiEjC-ijX5Hsc">
+                            </div>
+                            <div class="flex-grow">
+                                <h3 class="text-body-md font-body-md font-medium text-on-surface line-clamp-2">Keyframe
+                                    Pro 75% Barebone Kit - E-White</h3>
+                                <div class="text-label-sm font-label-sm text-text-muted mt-1">Trắng / Aluminum</div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="text-body-md font-body-md font-bold text-on-surface">3.500.000₫</span>
+                                    <span class="text-label-sm font-label-sm text-text-muted">SL: 1</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Item 2 -->
+                        <div class="flex gap-4 items-center">
+                            <div class="w-20 h-20 bg-surface-container rounded-md overflow-hidden flex-shrink-0">
+                                <img alt="Keycaps Image" class="w-full h-full object-cover"
+                                    data-alt="A meticulously arranged flat lay of minimalist mechanical keyboard switches scattered elegantly on a bright white surface. The switches feature a clean white housing with a subtle orange stem, echoing a premium, utilitarian tech brand identity. Studio lighting casts very soft, diffused shadows, highlighting the precision engineering of the plastic components. The composition is clean, organized, and highly detailed, conveying a sense of premium hardware quality."
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvk0o6mWZVA1gr8CPk38Y_ekFglRu427q_FcAgjpDMpvGzTaxnCcYWcJU_rNT6BgpW9rLVpgIZcNzvESc1u1tBlzQ0S5o7prfrS-XAZ_q7EcqRjOexC-QygUOvFpehFP_t2IZ3hAI7sQ4Ll0GrY_27bLuWLniRo_SQAky63y4jWKHKIATTWb_aIeldNsKeWOwA4tJVrJaU81uhMczGi-yx7A36j75dwjB-of5w8Vu9pg6OObdkTEI7GgEUoUbg3UzPZ5o2e4J0XgY">
+                            </div>
+                            <div class="flex-grow">
+                                <h3 class="text-body-md font-body-md font-medium text-on-surface line-clamp-2">Orange
+                                    Linear Switches (Pack of 90)</h3>
+                                <div class="text-label-sm font-label-sm text-text-muted mt-1">Linear / 45g</div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="text-body-md font-body-md font-bold text-on-surface">900.000₫</span>
+                                    <span class="text-label-sm font-label-sm text-text-muted">SL: 1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Discount Code -->
+                    <div class="flex gap-2 mb-6 border-t border-border-subtle pt-6">
+                        <input
+                            class="flex-grow px-4 py-2 bg-surface-white border border-border-subtle rounded-lg text-body-md font-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none"
+                            placeholder="Mã giảm giá" type="text">
+                        <button
+                            class="px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-bold font-label-bold hover:bg-on-surface transition-colors">Áp
+                            dụng</button>
+                    </div>
+                    <!-- Totals -->
+                    <div class="space-y-2 text-body-md font-body-md border-b border-border-subtle pb-4 mb-4">
+                        <div class="flex justify-between text-on-surface">
+                            <span class="">Tạm tính</span>
+                            <span class="">4.400.000₫</span>
+                        </div>
+                        <div class="flex justify-between text-on-surface">
+                            <span class="">Phí vận chuyển</span>
+                            <span class="">Miễn phí</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-8">
+                        <span class="text-body-lg font-body-lg font-medium text-on-surface">Tổng cộng</span>
+                        <span
+                            class="text-headline-md font-headline-md font-bold text-primary-container">4.400.000₫</span>
+                    </div>
+                    <!-- Submit Button -->
+                    <button
+                        class="w-full py-4 bg-primary-container text-on-primary rounded-lg text-label-bold font-label-bold hover:bg-primary transition-colors shadow-sm flex justify-center items-center gap-2 hover:translate-y-[-2px]">
+                        Đặt hàng
+                        <span class="material-symbols-outlined text-[18px]"
+                            data-icon="arrow_forward">arrow_forward</span>
+                    </button>
+                    <p
+                        class="text-label-sm font-label-sm text-text-muted text-center mt-4 flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]" data-icon="lock">lock</span>
+                        Thanh toán an toàn &amp; bảo mật
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-lowest dark:bg-surface-container-highest border-t border-border-subtle dark:border-outline-variant full-width">
+        <div class="w-full py-20 px-8 grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-[1200px] mx-auto">
+            <div class="flex flex-col space-y-4"><span
+                    class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface">KEYFRAME</span>
+                <p class="text-body-md font-body-md text-primary dark:text-primary-fixed">0 2024 Keyframe Engineering.
+                    All rights reserved.</p>
+            </div>
+            <div class="flex flex-col space-y-3">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">H᝗ trផ</h4><a
+                    class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Support</a><a
+                    class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Shipping</a><a
+                    class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Warranty</a>
+            </div>
+            <div class="flex flex-col space-y-3">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">C᜔ng ty</h4><a
+                    class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Contact</a><a
+                    class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">About Us</a><a
+                    class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Privacy</a>
+            </div>
+            <div class="flex flex-col space-y-4">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">Bᜓn tin</h4>
+                <div class="flex"><input
+                        class="w-full bg-surface-white border border-border-subtle rounded-l-md px-4 py-2 focus:outline-none focus:border-primary-container text-body-md font-body-md"
+                        placeholder="Email cនa bᜓn" type="email"><button
+                        class="bg-on-surface text-on-primary px-4 py-2 rounded-r-md hover:bg-secondary transition-colors material-symbols-outlined">arrow_forward</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+
+</html>

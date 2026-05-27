@@ -67,7 +67,7 @@ namespace KeyboardStoreAPI.API.Data
                         Price = 2400000m,
                         Stock = 50,
                         CategoryId = mechanicalCategory.Id,
-                        ImageUrl = "https://example.com/keychron-k2.jpg",
+                        ImageUrl = "/images/products/keyboard-base.jpg",
                         CreatedAt = DateTime.UtcNow
                     },
                     new Product
@@ -77,7 +77,7 @@ namespace KeyboardStoreAPI.API.Data
                         Price = 1600000m,
                         Stock = 30,
                         CategoryId = mechanicalCategory.Id,
-                        ImageUrl = "https://example.com/rk61.jpg",
+                        ImageUrl = "/images/products/hero-keyboard.jpg",
                         CreatedAt = DateTime.UtcNow
                     },
                     new Product
@@ -87,7 +87,7 @@ namespace KeyboardStoreAPI.API.Data
                         Price = 3200000m,
                         Stock = 15,
                         CategoryId = keycapsCategory.Id,
-                        ImageUrl = "https://example.com/gmk-olivia.jpg",
+                        ImageUrl = "/images/products/bow-keycaps.jpg",
                         CreatedAt = DateTime.UtcNow
                     }
                 };

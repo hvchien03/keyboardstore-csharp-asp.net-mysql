@@ -1,0 +1,31 @@
+user@test.com/User@123
+admin@keyboardstore.com/Admin@123
+"email": "chienvan1203@gmail.com", "password": "Chien@123",
+
+làm sao để đăng nhập vào admin thì thấy các api admin có thể dùng, đăng nhậpv ào user thì chỉ hiện các api
+user có thể dùng trong swagger
+
+Ngân hàng	NCB
+Số thẻ	9704198526191432198
+Tên chủ thẻ	NGUYEN VAN A
+Ngày phát hành	07/15
+Mật khẩu OTP	123456
+
+Test Customer
+Bug: 
+1. products?category=switches, chưa phân loại
+2. chưa filter, lọc sản phẩm, theo giá (be + thương hiệu, layout phím(5 loại), switch(4 loại) thiết kế lại db)
+3. chưa phân trang
+4. chưa có tìm kiếm theo tên phím, thương hiệu
+5. lỗi chưa hiển thị số sản phẩm có trong giỏ hàng
+6. BE + đặt hàng phải verify email, kh đúng kh cho đặt
+7. trang chủ phần danh mục nổi bật chưa link về đúng trang
+8. tại trang chủ khi chuyển sang đăng ký đăng nhập, phần header, footer hơi dịch chuyển sang phải nhìn rất khó chịu
+
+
+Plan
+1. làm các trang Switches, Keycaps, Accessories nhớ phải có phân trang OK
+2. làm phân trang cho nhưng trang chưa có  OK
+3. trang chủ phần danh mục nổi bật chưa link về đúng trang OK
+4. tại trang chủ khi chuyển sang đăng ký đăng nhập, phần header, footer hơi dịch chuyển sang phải nhìn rất khó chịu OK
+5. 

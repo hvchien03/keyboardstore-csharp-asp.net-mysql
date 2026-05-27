@@ -123,25 +123,6 @@ KeyboardStoreAPI.API/
 - Redis
 - Git
 
-## Cau Hinh Local Secrets
-
-`appsettings.json` khong nen chua secret that. Khi chay local, dung .NET user-secrets hoac environment variables.
-
-Chay cac lenh sau tu thu muc goc project:
-
-```powershell
-dotnet user-secrets init --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost;Database=KeyboardStoreDB;User=root;Password=YOUR_DB_PASSWORD;" --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-dotnet user-secrets set "JwtSettings:SecretKey" "YOUR_AT_LEAST_32_CHARACTERS_SECRET_KEY" --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-
-dotnet user-secrets set "EmailSettings:SenderEmail" "YOUR_EMAIL" --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-dotnet user-secrets set "EmailSettings:Username" "YOUR_EMAIL" --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-dotnet user-secrets set "EmailSettings:Password" "YOUR_APP_PASSWORD" --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-
-dotnet user-secrets set "VNPaySettings:TmnCode" "YOUR_VNPAY_TMN_CODE" --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-dotnet user-secrets set "VNPaySettings:HashSecret" "YOUR_VNPAY_HASH_SECRET" --project .\KeyboardStoreAPI.API\KeyboardStoreAPI.API.csproj
-```
 
 Redis mac dinh dang cau hinh la:
 
@@ -185,12 +166,6 @@ Khi database chua co du lieu, project se seed:
 - Password: `Admin@123`
 
 Project cung seed mot so category va product mau.
-
-## Ghi Chu Bao Mat
-
-- Khong commit connection string, JWT secret, email password hay VNPay secret len repository.
-- Dung `LOCAL_SECRETS.example.md` lam huong dan cau hinh local.
-- Nen thay doi password admin seed khi dua len moi truong that.
 
 ## Roadmap Goi Y
 

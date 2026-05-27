@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>KEYFRAME - Bàn Phím Cơ Cao Cấp</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#00497c",
+                        "secondary": "#5f5e5e",
+                        "tertiary-fixed-dim": "#9dcaff",
+                        "surface-tint": "#a23f00",
+                        "primary-fixed-dim": "#ffb595",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed": "#001d35",
+                        "surface-bright": "#f9f9f9",
+                        "surface-white": "#FFFFFF",
+                        "surface-dim": "#dadada",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#636262",
+                        "outline-variant": "#e3bfb1",
+                        "border-subtle": "#E0E0E0",
+                        "tertiary-fixed": "#d1e4ff",
+                        "surface-container": "#eeeeee",
+                        "inverse-primary": "#ffb595",
+                        "on-surface-variant": "#5a4136",
+                        "tertiary": "#0061a2",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1c1c",
+                        "secondary-fixed": "#e5e2e1",
+                        "outline": "#8e7164",
+                        "secondary-container": "#e2dfde",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "inverse-surface": "#2f3131",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "success-green": "#28A745",
+                        "on-primary-container": "#561e00",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#7c2e00",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#474746",
+                        "primary-container": "#ff6700",
+                        "primary-fixed": "#ffdbcd",
+                        "primary": "#a23f00",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "tertiary-container": "#019cff",
+                        "on-tertiary-container": "#003156",
+                        "text-muted": "#757575",
+                        "surface-container-low": "#f3f3f3",
+                        "on-error": "#ffffff",
+                        "background": "#f9f9f9",
+                        "on-primary-fixed": "#351000",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "inverse-on-surface": "#f1f1f1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "section-padding": "80px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+    <!-- TopNavBar (Shared Component) -->
+    <nav
+        class="sticky top-0 z-50 flex justify-between items-center w-full px-8 py-4 max-w-[1440px] mx-auto bg-surface-white/95 backdrop-blur-md shadow-sm dark:shadow-none border-b border-border-subtle dark:border-outline-variant">
+        <!-- Brand Logo -->
+        <a class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight"
+            href="#">KEYFRAME</a>
+        <!-- Navigation Links (Desktop) -->
+        <div class="hidden md:flex space-x-8">
+            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 font-label-bold text-label-bold active"
+                href="#">Trang Chủ</a>
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Custom Keyboards</a>
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Switches</a>
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Keycaps</a>
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Accessories</a>
+        </div>
+        <!-- Trailing Actions -->
+        <div class="flex items-center space-x-6 text-primary dark:text-primary-fixed">
+            <button aria-label="Search" class="hover:scale-95 transition-transform duration-150 cursor-pointer">
+                <span class="material-symbols-outlined" data-icon="search">search</span>
+            </button>
+            <button aria-label="Profile" class="hover:scale-95 transition-transform duration-150 cursor-pointer">
+                <span class="material-symbols-outlined" data-icon="person">person</span>
+            </button>
+            <button aria-label="Cart" class="hover:scale-95 transition-transform duration-150 cursor-pointer relative">
+                <span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+                <span
+                    class="absolute -top-1 -right-1 bg-primary-container text-on-primary font-label-sm text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+            </button>
+        </div>
+    </nav>
+    <!-- Main Content Canvas -->
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section
+            class="relative w-full h-[819px] min-h-[600px] flex items-center justify-center bg-surface-white overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img alt="Hero Keyboard" class="w-full h-full object-cover opacity-90 object-center"
+                    data-alt="A macro photography shot of a premium, custom mechanical keyboard resting on a sleek, minimalist white desk setup. The lighting is soft and natural, emphasizing the matte texture of the keycaps and the precision-machined aluminum case. The overall aesthetic is clean, modern, and high-tech, perfectly aligning with a premium corporate tech brand style. Focus is razor-sharp on the central keys, softly blurring the edges."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD886dnMofYAHKkXd1o7qbYbZKC2qPM4jPJwHeCEKnc3b74wcBj5aUrp7t6awSYiQZLmwEhq4U_1P8sYziPPyOLJJ6NIqMw2IL-jBA1Q9B2_Qzu4L4ZOVtYc-uidftwQiXzNmkETAXRLTVoPt8h42DQ3NMgHqbiuu-NtuSLPqQNQ0CbPuqDj7irbO5HYq4fTc3okTqseJGKm5IlIHqo95tf_ncNMVaK3qF3RO-ETpMxY3AgEicx_8NsWaBpYSu4yynxlcarvMZ0yU4" />
+                <div class="absolute inset-0 bg-gradient-to-r from-surface-white/80 to-transparent"></div>
+            </div>
+            <div class="relative z-10 w-full max-w-container-max mx-auto px-gutter md:px-section-padding">
+                <div class="max-w-lg">
+                    <span
+                        class="inline-block bg-surface-container-low text-secondary font-label-sm text-label-sm px-3 py-1 rounded-full mb-4 border border-border-subtle uppercase tracking-wider">Phiên
+                        bản giới hạn</span>
+                    <h1
+                        class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-surface mb-6">
+                        Trải nghiệm gõ phím tinh tủy.</h1>
+                    <p class="text-body-lg font-body-lg text-secondary mb-8">Khám phá bộ sưu tập bàn phím cơ custom cao
+                        cấp mới nhất. Thiết kế nguyên khối, trải nghiệm gõ đỉnh cao, phong cách tối giản.</p>
+                    <div class="flex space-x-4">
+                        <button
+                            class="bg-primary-container text-on-primary font-label-bold text-label-bold px-8 py-3 rounded hover:opacity-90 transition-opacity">Mua
+                            Ngay</button>
+                        <button
+                            class="border border-on-background text-on-background font-label-bold text-label-bold px-8 py-3 rounded hover:bg-surface-container-low transition-colors">Tìm
+                            hiểu thêm</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Featured Categories Bento Grid -->
+        <section class="py-section-padding bg-background">
+            <div class="w-full max-w-container-max mx-auto px-gutter md:px-0">
+                <h2 class="text-headline-md font-headline-md text-center mb-12">Danh mục nổi bật</h2>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter h-[auto] md:h-[500px]">
+                    <!-- Main Category (Custom) -->
+                    <a class="group relative md:col-span-8 bg-surface-white rounded-lg overflow-hidden border border-border-subtle hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-all duration-300"
+                        href="#">
+                        <img alt="Custom Keyboards"
+                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            data-alt="A highly aesthetic top-down view of disassembled mechanical keyboard components neatly arranged on an immaculate white mat. The scene includes colorful keycaps, metallic switches, and a pristine aluminum case frame, illuminated by even, bright studio lighting. The composition embodies engineered simplicity and the joy of custom building, fitting a modern minimalist tech aesthetic."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuvhb2n2QwhbXAmn36me8pTNIWITvacg5pzn_KFCljf8_djU8HdsHKzu7uedebSN9-h7KR-xd2D4U_bNerYE8zR9xlQjgAlzJFD6IOsj5Q_UHmZaoV7TacpCWSfrZZM14NCXEyUxCfWN3J1iDht3SEToaEC8AtZwLKCx-wke7T8haKc4BvXjQ6lLbN9Ngfv1L7FzLfk2VAsLNdFxfq3qRxW_L7l4mXMee5eNT2jeE6v-2_3iTBBw746wO_aJu0oskKm_lRJzMj3-Q" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
+                        </div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <h3 class="text-on-primary text-headline-md font-headline-md mb-2">Custom Build</h3>
+                            <p class="text-on-primary/80 text-body-md font-body-md flex items-center">
+                                Khám phá thế giới sáng tạo <span
+                                    class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+                            </p>
+                        </div>
+                    </a>
+                    <div class="md:col-span-4 grid grid-cols-1 gap-gutter">
+                        <!-- Sub Category 1 (Switches) -->
+                        <a class="group relative bg-surface-white rounded-lg overflow-hidden border border-border-subtle hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-all duration-300"
+                            href="#">
+                            <div class="p-6 h-full flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-headline-md font-headline-md text-on-surface">Switches</h3>
+                                    <span
+                                        class="material-symbols-outlined text-secondary group-hover:text-primary-container transition-colors">tune</span>
+                                </div>
+                                <img alt="Switches"
+                                    class="w-full h-32 object-contain mt-4 group-hover:scale-105 transition-transform duration-500"
+                                    data-alt="Close-up macro photography of several vibrant, translucent mechanical keyboard switches resting against a clean white background. The lighting highlights the internal metallic contacts and colorful stems, projecting a highly engineered, premium quality feel suitable for a minimalist e-commerce showcase."
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVmXx5nyCj7DDvDufv5geCawpl4DEn8vqrlbcsq-2R53PJvgqRHDsUbRq6Qro2LgWGW4OEbOwFjcv04gH1SA8_jzm7YXpzttpXUwyPIz5KEb8vb_zs_INaE0dnr_DpuZtzF5nsTSYRbpjFlP7RPV9REJBUI-YOU7Oc_kSJS85zOuFuAucrJgxd1vPohRbqbNcWk1olEriyBSfMFB8daI0zWknkzs92UgllKnjf9M_iPIBHpn-1B_sSdDQv5JSFzwJjZCChs3qD59g" />
+                            </div>
+                        </a>
+                        <!-- Sub Category 2 (Keycaps) -->
+                        <a class="group relative bg-surface-white rounded-lg overflow-hidden border border-border-subtle hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-all duration-300"
+                            href="#">
+                            <div class="p-6 h-full flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-headline-md font-headline-md text-on-surface">Keycaps</h3>
+                                    <span
+                                        class="material-symbols-outlined text-secondary group-hover:text-primary-container transition-colors">grid_on</span>
+                                </div>
+                                <img alt="Keycaps"
+                                    class="w-full h-32 object-contain mt-4 group-hover:scale-105 transition-transform duration-500"
+                                    data-alt="A stylized arrangement of premium mechanical keyboard keycaps in a modern, muted color palette (grays, whites, subtle pastels) set against a stark white backdrop. The soft, diffuse lighting emphasizes the matte finish and precise typography of the keycaps, conveying a sense of tactile luxury and minimalist design."
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBFJ5KZU4xA1_jr-ZFTZKzS3IvE_FCeuUuQ-I11MO9Qd_cyefeV82R-rjH2JbEIL0TxYm4G3-LJAK4hVOyZh_qOiTHrnsT59-IqtwC2sSoLiqtqXfmfSZNqB99V6il4s_dPN5ZWqNSoKd9_-I8G0hMfn_qznQdDlzWt9eBpM7W0OsZBxYbFTciPbnD6bsHmdZianBakNtlTdcnCBcQzjwh8R8ivKpAXfN5QseCwK1LyhNhiLThkgzQMSWSI_NcjJDap7sQ5BmHuwo" />
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- New Arrivals (Product Carousel/Grid) -->
+        <section class="py-section-padding bg-surface-white">
+            <div class="w-full max-w-container-max mx-auto px-gutter md:px-0">
+                <div class="flex justify-between items-end mb-12 border-b border-border-subtle pb-4">
+                    <h2 class="text-headline-md font-headline-md text-on-surface">Sản phẩm mới nhất</h2>
+                    <a class="text-label-bold font-label-bold text-secondary hover:text-primary-container flex items-center transition-colors"
+                        href="#">
+                        Xem tất cả <span class="material-symbols-outlined ml-1 text-sm">chevron_right</span>
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                    <!-- Product Card 1 -->
+                    <div
+                        class="group bg-surface-white rounded border border-border-subtle hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-200">
+                        <div class="relative p-6 flex justify-center items-center h-64 bg-surface-bright rounded-t">
+                            <span
+                                class="absolute top-4 left-4 bg-[#F7F7F7] text-secondary font-label-sm text-[10px] px-2 py-1 rounded-sm tracking-wide">MỚI</span>
+                            <img alt="KFE-V1 Aluminum"
+                                class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                data-alt="A sleek, minimalist mechanical keyboard with an anodized dark grey aluminum case, viewed from a slight 45-degree angle on a pure white background. The studio lighting provides soft, diffused reflections that highlight the premium metal finish and perfectly aligned PBT keycaps, creating a high-end consumer electronic aesthetic."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWjMAFacB9mxp1jn1j1fjLJQf6tGO5OV0LZbCI8QMEnbmRCULDV55bhVFMoJ9PfvsNM4wOI7ujhZLu8N9lx9gq6BQ0KOiFO0ueUbGbc5rWV7n578ZtUZMheWFzGdjGux63pjCB-t7Dc3RiW1h3igrXC4kE0969T4LVhCmze_ZbOJ_VTxqrm5JkLLYfPs1vVleb-fu8ZypbWWBkM5Gg5JNxYNaH6GMAy96DpXwocj6KW8NAPJn7N4Ipx2jU_soILDwYcVxqBCRtzpM" />
+                        </div>
+                        <div class="p-6">
+                            <h3
+                                class="text-body-lg font-body-lg text-on-surface font-medium mb-1 group-hover:text-primary-container transition-colors">
+                                KFE-V1 Aluminum Base</h3>
+                            <p class="text-label-sm font-label-sm text-secondary mb-4">Case nhôm nguyên khối, Gasket
+                                Mount</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-body-md font-label-bold font-bold text-on-surface">3.490.000 ₫</span>
+                                <button aria-label="Add to cart"
+                                    class="text-primary-container hover:bg-surface-container-low p-2 rounded-full transition-colors">
+                                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Card 2 -->
+                    <div
+                        class="group bg-surface-white rounded border border-border-subtle hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-200">
+                        <div class="relative p-6 flex justify-center items-center h-64 bg-surface-bright rounded-t">
+                            <img alt="KFE Silent Linear"
+                                class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                data-alt="A cluster of premium linear mechanical keyboard switches with clear housings and vibrant orange stems, set against a pristine white background. High-key studio lighting emphasizes the precision engineering and translucent materials, evoking a sense of smooth, quiet performance suited for a modern tech catalog."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUFbjwi_zO0-eGXEKMEu2ts2YUy3jfyJfTOOQJy8tfS52eaw8ts6_S7gadUrAOpI8GdOtaQNlhpYHGlyDw2t0HGdf-Ur_l7aMGkfopKHs_Q7JWgi1ZqmY0LE3Tpn0ivuoa9Omb9KxS9yNEYLvb3VsNDw0lofh5gx8jTio11gZKw7Paei58O9-f96KmJgocXt49BuHg22YLM-kLZJFUr2JoLj1qCa8U_8t9OIisb9Qgbp4iQByt8JFr1otHE9pql7PNRTADReBaOjE" />
+                        </div>
+                        <div class="p-6">
+                            <h3
+                                class="text-body-lg font-body-lg text-on-surface font-medium mb-1 group-hover:text-primary-container transition-colors">
+                                KFE Silent Linear Switch</h3>
+                            <p class="text-label-sm font-label-sm text-secondary mb-4">Lực nhấn 45g, Hành trình 3.8mm,
+                                Pack 35</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-body-md font-label-bold font-bold text-on-surface">450.000 ₫</span>
+                                <button aria-label="Add to cart"
+                                    class="text-primary-container hover:bg-surface-container-low p-2 rounded-full transition-colors">
+                                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Card 3 -->
+                    <div
+                        class="group bg-surface-white rounded border border-border-subtle hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-200">
+                        <div class="relative p-6 flex justify-center items-center h-64 bg-surface-bright rounded-t">
+                            <span
+                                class="absolute top-4 left-4 bg-[#F7F7F7] text-secondary font-label-sm text-[10px] px-2 py-1 rounded-sm tracking-wide">HOT</span>
+                            <img alt="KFE PBT Keycap Set"
+                                class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                data-alt="A complete set of minimalist, double-shot PBT keycaps arranged in standard layout layers, featuring an elegant 'BoW' (Black on White) colorway. The studio environment is flawlessly white, with soft shadows creating ambient depth, perfectly capturing the clean, corporate modern aesthetic desired by keyboard enthusiasts."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXoA7sUQbTbtWs822R845v2LErmzBt-A5tsKuBHZ_vtnE_oO1WmPheT16HM9pEP_-3HWTEwm3nAtwg_4LmC_j1h_TKIsEcaJQ0vBtjZEYpgV8FRRGWpLuDzEamenxMmYXn2TjCw0RITo47JjE46ambsiOsgqvrfWQKoj5eAlFc1pubm4jSZZGROBK1daJTueBDKY4d9SPu2mMY1OugOa0RVYABiF9zO6hfdt8DAN_CUih904sICGEX_hhoLOnwGe7hZTWop0DLyi4" />
+                        </div>
+                        <div class="p-6">
+                            <h3
+                                class="text-body-lg font-body-lg text-on-surface font-medium mb-1 group-hover:text-primary-container transition-colors">
+                                BoW Minimalist Keycaps</h3>
+                            <p class="text-label-sm font-label-sm text-secondary mb-4">PBT Double-shot, Cherry Profile
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-body-md font-label-bold font-bold text-on-surface">990.000 ₫</span>
+                                <button aria-label="Add to cart"
+                                    class="text-primary-container hover:bg-surface-container-low p-2 rounded-full transition-colors">
+                                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Card 4 -->
+                    <div
+                        class="group bg-surface-white rounded border border-border-subtle hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-200">
+                        <div class="relative p-6 flex justify-center items-center h-64 bg-surface-bright rounded-t">
+                            <img alt="Coiled Cable"
+                                class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                data-alt="A premium, tightly coiled aviator USB-C cable for mechanical keyboards, featuring a stark white braided sleeve and polished silver connectors. It is displayed artistically on a light grey, slightly textured surface under soft, high-end gallery lighting, embodying a sophisticated, engineered aesthetic."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiRx22mWX2HOzENdV6xDbenrEw2_gm-UV2BSDcKtwAi1zjNEW1Y3Ist-WtCXGM6FO15jk6ot-HpXM3klkR2eej4Fd7NQuEes7pq0_WTFqkpT7SBb6HElJMDvxw1KK6yeJpr4NtBHCxftFBW6_LioYvSIrX9-cOkCDVxeDcxGRUszEZiS1jzuxOel1siXutKj2Q10U_dTqj2F3XaUIPFtJkZAxiTEpHuhHncnkh_trCyCwNHU_HV0yyAH-_u8P8qCC0PqknwG40YnQ" />
+                        </div>
+                        <div class="p-6">
+                            <h3
+                                class="text-body-lg font-body-lg text-on-surface font-medium mb-1 group-hover:text-primary-container transition-colors">
+                                Premium Aviator Cable</h3>
+                            <p class="text-label-sm font-label-sm text-secondary mb-4">USB-C to USB-A, Bọc dù siêu bền
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-body-md font-label-bold font-bold text-on-surface">550.000 ₫</span>
+                                <button aria-label="Add to cart"
+                                    class="text-primary-container hover:bg-surface-container-low p-2 rounded-full transition-colors">
+                                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer (Shared Component) -->
+    <footer
+        class="bg-surface-container-lowest dark:bg-surface-container-highest border-t border-border-subtle dark:border-outline-variant full-width">
+        <div class="w-full py-20 px-8 grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-[1200px] mx-auto">
+            <!-- Brand & Copyright -->
+            <div class="flex flex-col space-y-4">
+                <span
+                    class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface">KEYFRAME</span>
+                <p class="text-body-md font-body-md text-primary dark:text-primary-fixed">
+                    © 2024 Keyframe Engineering. All rights reserved.
+                </p>
+            </div>
+            <!-- Links Column 1 -->
+            <div class="flex flex-col space-y-3">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">Hỗ trợ</h4>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Support</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Shipping</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Warranty</a>
+            </div>
+            <!-- Links Column 2 -->
+            <div class="flex flex-col space-y-3">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">Công ty</h4>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Contact</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">About Us</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Privacy</a>
+            </div>
+            <!-- Newsletter / Social (Optional addition for modern feel) -->
+            <div class="flex flex-col space-y-4">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">Bản tin</h4>
+                <div class="flex">
+                    <input
+                        class="w-full bg-surface-white border border-border-subtle rounded-l-md px-4 py-2 focus:outline-none focus:border-primary-container text-body-md font-body-md"
+                        placeholder="Email của bạn" type="email" />
+                    <button
+                        class="bg-on-surface text-on-primary px-4 py-2 rounded-r-md hover:bg-secondary transition-colors material-symbols-outlined">arrow_forward</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

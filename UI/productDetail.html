@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>KEYFRAME - K1 Pro Mechanical Keyboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#00497c",
+                        "secondary": "#5f5e5e",
+                        "tertiary-fixed-dim": "#9dcaff",
+                        "surface-tint": "#a23f00",
+                        "primary-fixed-dim": "#ffb595",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed": "#001d35",
+                        "surface-bright": "#f9f9f9",
+                        "surface-white": "#FFFFFF",
+                        "surface-dim": "#dadada",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#636262",
+                        "outline-variant": "#e3bfb1",
+                        "border-subtle": "#E0E0E0",
+                        "tertiary-fixed": "#d1e4ff",
+                        "surface-container": "#eeeeee",
+                        "inverse-primary": "#ffb595",
+                        "on-surface-variant": "#5a4136",
+                        "tertiary": "#0061a2",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1c1c",
+                        "secondary-fixed": "#e5e2e1",
+                        "outline": "#8e7164",
+                        "secondary-container": "#e2dfde",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "inverse-surface": "#2f3131",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "success-green": "#28A745",
+                        "on-primary-container": "#561e00",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#7c2e00",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#474746",
+                        "primary-container": "#ff6700",
+                        "primary-fixed": "#ffdbcd",
+                        "primary": "#a23f00",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "tertiary-container": "#019cff",
+                        "on-tertiary-container": "#003156",
+                        "text-muted": "#757575",
+                        "surface-container-low": "#f3f3f3",
+                        "on-error": "#ffffff",
+                        "background": "#f9f9f9",
+                        "on-primary-fixed": "#351000",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "inverse-on-surface": "#f1f1f1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "section-padding": "80px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-white">
+    <!-- TopNavBar -->
+    <nav
+        class="sticky top-0 z-50 flex justify-between items-center w-full px-8 py-4 max-w-[1440px] mx-auto bg-surface-white/95 backdrop-blur-md shadow-sm dark:shadow-none border-b border-border-subtle dark:border-outline-variant">
+        <!-- Brand Logo -->
+        <a class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight"
+            href="#">KEYFRAME</a>
+        <!-- Navigation Links (Desktop) -->
+        <div class="hidden md:flex space-x-8">
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Trang Ch᜷</a>
+            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 font-label-bold text-label-bold active"
+                href="#">Custom Keyboards</a>
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Switches</a>
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Keycaps</a>
+            <a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-all duration-200 font-label-bold text-label-bold"
+                href="#">Accessories</a>
+        </div>
+        <!-- Trailing Actions -->
+        <div class="flex items-center space-x-6 text-primary dark:text-primary-fixed">
+            <button aria-label="Search" class="hover:scale-95 transition-transform duration-150 cursor-pointer">
+                <span class="material-symbols-outlined" data-icon="search">search</span>
+            </button>
+            <button aria-label="Profile" class="hover:scale-95 transition-transform duration-150 cursor-pointer">
+                <span class="material-symbols-outlined" data-icon="person">person</span>
+            </button>
+            <button aria-label="Cart" class="hover:scale-95 transition-transform duration-150 cursor-pointer relative">
+                <span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+                <span
+                    class="absolute -top-1 -right-1 bg-primary-container text-on-primary font-label-sm text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+            </button>
+        </div>
+    </nav>
+    <main class="max-w-[1200px] mx-auto px-4 md:px-8 py-10 md:py-16">
+        <!-- Product Hero Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-gutter mb-24">
+            <!-- Image Gallery (Left) -->
+            <div class="lg:col-span-7 flex flex-col gap-4">
+                <div
+                    class="w-full aspect-[4/3] bg-surface-white border border-border-subtle rounded-lg overflow-hidden flex items-center justify-center p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] relative group cursor-crosshair">
+                    <img alt="Keyboard K1 Pro"
+                        class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                        data-alt="A top-down, extremely high-resolution studio photograph of a premium mechanical keyboard with a minimalist, industrial design. The keyboard features a sleek aluminum chassis and contrasting white and dark gray keycaps. The lighting is soft and perfectly even, typical of a high-end consumer electronics product shot, casting subtle shadows on a pristine white background. The overall aesthetic is clean, precise, and tech-focused, emphasizing the engineered simplicity of the device."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR8n5mnZYyHZ1tkj2lCWoLL0Lr73-2CDRjer1n0QkQ8CGL2HZ5KFxKiZnJn2o_ZuJ8SR-bPMRwwcwx45K2lTXjyWbtbWfJVw0FjlTJXNF4nndgtAZOSW5Y1zWihKjDzUf4PL3Lm-NYIQxmMwMUYD6N7IzjTIihPmm3rW_CTP4OIML44sq6Lwr7nK2ArG7d63FvFO-bc-ReDY5VJ6QJzvXU06-SIL6VxiWzf7f9kWHrF9cx61gkz8zIsmJEYR72Kw8dFob4roiXWNc">
+                    <div class="absolute top-4 left-4 flex gap-2">
+                        <span
+                            class="bg-surface-container-low text-on-background px-3 py-1 rounded-full text-label-sm font-label-sm uppercase tracking-wider">In
+                            Stock</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-4 gap-4">
+                    <button
+                        class="aspect-square bg-surface-white border-2 border-primary-container rounded-lg overflow-hidden flex items-center justify-center p-2 opacity-100 transition-opacity">
+                        <img alt="Thumbnail 1" class="w-full h-full object-contain"
+                            data-alt="A close-up macro shot of a single mechanical keyboard switch mechanism, highlighting the intricate engineering and premium materials. The shot is well-lit with a clean, light-mode aesthetic, focusing on the tactile nature of the hardware."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-j-N7Wl8zFnvQhbxzc6xuD05ACATXLP5B-pYlGpPDwLEn9iDHWmBofG6_BosdYPFdtyTDQM7b1zJ9nejhcb6lytUag_CJI9LzEzGJdbVnUDXVKNXm8WAxtaNG_-hyK7EbYThq0EhMmou0UVzey0PH24hwkbHXj-BGuKzyGW1DU34o51zgcGRUAWYDvOkl41u19-GfJ3FVPYq0vntmNgfQBddopP7T18A8y9LLzXiPsd9EQDXlsk3xCIf3JHxuCjh_I6Oncp0_kfw">
+                    </button>
+                    <button
+                        class="aspect-square bg-surface-white border border-border-subtle hover:border-outline rounded-lg overflow-hidden flex items-center justify-center p-2 opacity-60 hover:opacity-100 transition-all">
+                        <img alt="Thumbnail 2" class="w-full h-full object-contain"
+                            data-alt="An angled studio shot of a mechanical keyboard showcasing the profile and height of the keycaps. The lighting is crisp, emphasizing the texture of the plastic and the solid build quality of the aluminum frame against a stark white background."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMCi2sgGLEwCzie1d8_cULar4Hjrky73QqPk0DANz3pYfav8GLS66d1i56Wnx6jkOL822cmPenZGy-AbWWG2fvlVuII2oKHbkxCefPx5NIz53JrxQceh8O9q4YQNnqgDHmoVy0UIT91Ejckv-xImqC6ISQ23m-qKETmz3bzBJLiSgh2ZBpzsm_ejoJeTQZ8dtXfiAAJhu5OOAyvJLSnCQmFFeyTQAXEFknoqakp54Q3AvqVGljeV1Vsr1lc97ET7GdddgJ75lr6Y0">
+                    </button>
+                    <button
+                        class="aspect-square bg-surface-white border border-border-subtle hover:border-outline rounded-lg overflow-hidden flex items-center justify-center p-2 opacity-60 hover:opacity-100 transition-all">
+                        <img alt="Thumbnail 3" class="w-full h-full object-contain"
+                            data-alt="A detailed view of the back of a premium mechanical keyboard, highlighting the USB-C port, the brand logo, and the adjustable rubber feet. The environment is minimalist and bright, focusing entirely on the product's finish and details."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZyArBqxV6sW83UVZYzQQF1FYGyznI5YUInnlmRCiJMg9u0ngOI_JbWYw0ufCJhhAc96iSJcS1uLSd13iK-bIH7dxE43Ov8QZUMLWdhXR1SX8f6l6BfvLsnqUYvLtZUIXRxRN4L2VjtB_LhdcQAJmc0jpLnPxuJ2cpkzmk07Abb-JU8jHy7tdPx_HEXtlC9hcr-bKocM80xxuWWack_K2FtQV4URSikiaKRiVG8eZVjUHGChmSR1j47_TEAfWUYFkCut-pRDupipI">
+                    </button>
+                    <button
+                        class="aspect-square bg-surface-white border border-border-subtle hover:border-outline rounded-lg overflow-hidden flex items-center justify-center p-2 opacity-60 hover:opacity-100 transition-all">
+                        <img alt="Thumbnail 4" class="w-full h-full object-contain"
+                            data-alt="A lifestyle image showing the mechanical keyboard sitting on a clean, modern desk setup alongside a sleek mouse and a minimalist monitor stand. The lighting is natural but bright, creating an inviting, professional workspace atmosphere."
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaROpuyhQHN_DSGnKLuridPmDHJMKuoa_WDAl2hcmy3u245Sc0sM5kOk69PwFsA4PRkGSyNEx3N8O69wiIIfqq6JH4U7YoCBbVmNyhcbyztj7_Rzv-U04x5-daHZqmglvQpoAShu4tcm6BQ6fU87oMiRowl7_HXr2z-4B6DLkPlTVzr354vJ1pAXqPmbSaTznJvCBA0CFRLQWN3oRAKEu-tQlFqM5T5qrZdM16lCKbMfwu1aeZ_tbi7PLBpBO2mBKa6c9fDZCUuPE">
+                    </button>
+                </div>
+            </div>
+            <!-- Product Info (Right) -->
+            <div class="lg:col-span-5 flex flex-col pt-2 lg:pt-8">
+                <h1
+                    class="text-display-lg-mobile md:text-display-lg font-display-lg-mobile md:font-display-lg text-on-background mb-2">
+                    K1 Pro</h1>
+                <p class="text-body-lg font-body-lg text-secondary mb-6">Bàn phím cơ Custom Cao cấp - Layout 75%</p>
+                <div class="text-headline-md font-headline-md text-on-background mb-8 flex items-baseline gap-4">
+                    3,490,000 ₫
+                    <span class="text-body-md font-body-md text-secondary line-through">4,200,000 ₫</span>
+                </div>
+                <div class="h-px w-full bg-border-subtle mb-8"></div>
+                <!-- Switches Selection -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-label-bold font-label-bold text-on-background uppercase tracking-wide">Lựa chọn
+                            Switch</h3>
+                        <a class="text-label-sm font-label-sm text-secondary hover:text-primary-container transition-colors underline"
+                            href="#">Hướng dẫn chọn Switch</a>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="relative cursor-pointer">
+                            <input checked="" class="peer sr-only" name="switch" type="radio">
+                            <div
+                                class="p-4 border border-border-subtle rounded-lg bg-surface-white peer-checked:border-primary-container peer-checked:shadow-[0_0_0_1px_rgba(255,103,0,1)] transition-all hover:bg-surface-container-low">
+                                <div class="font-label-bold text-label-bold text-on-background mb-1">Gateron Brown
+                                    (Tactile)</div>
+                                <div class="text-label-sm font-label-sm text-secondary">Phản hồi tốt, âm thanh vừa phải
+                                </div>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input class="peer sr-only" name="switch" type="radio">
+                            <div
+                                class="p-4 border border-border-subtle rounded-lg bg-surface-white peer-checked:border-primary-container peer-checked:shadow-[0_0_0_1px_rgba(255,103,0,1)] transition-all hover:bg-surface-container-low">
+                                <div class="font-label-bold text-label-bold text-on-background mb-1">Gateron Red
+                                    (Linear)</div>
+                                <div class="text-label-sm font-label-sm text-secondary">Êm ái, mượt mà, gõ nhanh</div>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input class="peer sr-only" name="switch" type="radio">
+                            <div
+                                class="p-4 border border-border-subtle rounded-lg bg-surface-white peer-checked:border-primary-container peer-checked:shadow-[0_0_0_1px_rgba(255,103,0,1)] transition-all hover:bg-surface-container-low">
+                                <div class="font-label-bold text-label-bold text-on-background mb-1">Gateron Blue
+                                    (Clicky)</div>
+                                <div class="text-label-sm font-label-sm text-secondary">Âm thanh clicky rõ ràng</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <!-- Color Selection -->
+                <div class="mb-10">
+                    <h3 class="text-label-bold font-label-bold text-on-background uppercase tracking-wide mb-4">Màu sắc
+                        Case</h3>
+                    <div class="flex gap-4">
+                        <button aria-label="Đen Nhám"
+                            class="w-12 h-12 rounded-full bg-[#1A1C1C] border-2 border-primary-container shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 transition-all"></button>
+                        <button aria-label="Trắng Sứ"
+                            class="w-12 h-12 rounded-full bg-[#E2E2E2] border border-border-subtle hover:border-secondary shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 transition-all"></button>
+                    </div>
+                </div>
+                <!-- Add to Cart Actions -->
+                <div class="flex flex-col gap-4 mt-auto">
+                    <button
+                        class="w-full bg-primary-container hover:bg-surface-tint text-white text-label-bold font-label-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm hover:shadow-md hover:-translate-y-[1px]">
+                        <span class="material-symbols-outlined text-[20px]">shopping_cart_checkout</span>
+                        THÊM VÀO GIỎ HÀNG
+                    </button>
+                    <button
+                        class="w-full bg-transparent border border-on-background text-on-background text-label-bold font-label-bold py-4 rounded-lg hover:bg-surface-container-low transition-colors">
+                        MUA NGAY
+                    </button>
+                </div>
+                <div class="mt-6 flex items-center gap-6 text-label-sm font-label-sm text-secondary">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[16px]">local_shipping</span>
+                        Miễn phí vận chuyển
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[16px]">verified</span>
+                        Bảo hành 12 tháng
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Features Bento Grid -->
+        <div class="mb-24">
+            <h2 class="text-headline-md font-headline-md text-on-background mb-10 text-center">Đỉnh cao thiết kế kỹ
+                thuật</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div
+                    class="md:col-span-2 bg-surface-white border border-border-subtle rounded-xl p-8 flex flex-col md:flex-row items-center gap-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div class="flex-1">
+                        <h3 class="text-headline-md font-headline-md text-on-background mb-4">Gasket Mount Design</h3>
+                        <p class="text-body-md font-body-md text-secondary">Cấu trúc Gasket Mount mang lại trải nghiệm
+                            gõ phím mềm mại, triệt tiêu tiếng ồn rỗng và độ rung hoàn hảo. Kết hợp với plate PC dẻo dai,
+                            mỗi nhấp phím là một sự thỏa mãn tuyệt đối.</p>
+                    </div>
+                    <div
+                        class="w-full md:w-1/2 aspect-video bg-surface-container-low rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[64px] text-secondary opacity-50">layers</span>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div
+                    class="bg-surface-white border border-border-subtle rounded-xl p-8 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div>
+                        <span
+                            class="material-symbols-outlined text-primary-container text-[32px] mb-4">swap_horiz</span>
+                        <h3 class="text-body-lg font-body-lg font-bold text-on-background mb-2">Hot-swappable</h3>
+                        <p class="text-body-md font-body-md text-secondary">Dễ dàng thay đổi switch mà không cần rã hàn.
+                            Tương thích với 99% switch 3-pin và 5-pin trên thị trường.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div
+                    class="bg-surface-white border border-border-subtle rounded-xl p-8 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div>
+                        <span class="material-symbols-outlined text-tertiary text-[32px] mb-4">palette</span>
+                        <h3 class="text-body-lg font-body-lg font-bold text-on-background mb-2">South-facing RGB</h3>
+                        <p class="text-body-md font-body-md text-secondary">LED RGB hướng nam tối ưu hóa độ sáng và
+                            không gây cấn với các profile keycap thấp như Cherry.</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div
+                    class="md:col-span-2 bg-surface-white border border-border-subtle rounded-xl p-8 flex flex-col md:flex-row items-center gap-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300">
+                    <div
+                        class="w-full md:w-1/2 aspect-video bg-surface-container-low rounded-lg flex items-center justify-center order-2 md:order-1">
+                        <span class="material-symbols-outlined text-[64px] text-secondary opacity-50">bluetooth</span>
+                    </div>
+                    <div class="flex-1 order-1 md:order-2">
+                        <h3 class="text-headline-md font-headline-md text-on-background mb-4">Kết nối đa phương thức
+                        </h3>
+                        <p class="text-body-md font-body-md text-secondary">Hỗ trợ kết nối linh hoạt qua Bluetooth 5.1
+                            (lưu 3 thiết bị), Wireless 2.4GHz độ trễ thấp và cáp USB-C bọc dù chắc chắn. Chuyển đổi mượt
+                            mà giữa MacOS và Windows.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-lowest dark:bg-surface-container-highest border-t border-border-subtle dark:border-outline-variant full-width">
+        <div class="w-full py-20 px-8 grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-[1200px] mx-auto">
+            <!-- Brand & Copyright -->
+            <div class="flex flex-col space-y-4">
+                <span
+                    class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface">KEYFRAME</span>
+                <p class="text-body-md font-body-md text-primary dark:text-primary-fixed">
+                    © 2024 Keyframe Engineering. All rights reserved.
+                </p>
+            </div>
+            <!-- Links Column 1 -->
+            <div class="flex flex-col space-y-3">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">H᜷ tr᜷</h4>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Support</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Shipping</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Warranty</a>
+            </div>
+            <!-- Links Column 2 -->
+            <div class="flex flex-col space-y-3">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">Ctng ty</h4>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Contact</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">About Us</a>
+                <a class="text-body-md font-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:underline transition-all cursor-pointer"
+                    href="#">Privacy</a>
+            </div>
+            <!-- Newsletter / Social -->
+            <div class="flex flex-col space-y-4">
+                <h4 class="text-label-bold font-label-bold text-on-surface uppercase tracking-wider mb-2">Bᜲn tin</h4>
+                <div class="flex">
+                    <input
+                        class="w-full bg-surface-white border border-border-subtle rounded-l-md px-4 py-2 focus:outline-none focus:border-primary-container text-body-md font-body-md"
+                        placeholder="Email cᜱa bᜲn" type="email">
+                    <button
+                        class="bg-on-surface text-on-primary px-4 py-2 rounded-r-md hover:bg-secondary transition-colors material-symbols-outlined">arrow_forward</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+
+</html>
