@@ -31,7 +31,7 @@ ValidateRequiredConfiguration(builder.Configuration);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         defaultConnection,
-        ServerVersion.AutoDetect(defaultConnection)));
+        new MySqlServerVersion(new Version(8, 0, 36))));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = GetRequiredConfigurationValue(builder.Configuration, "JwtSettings:SecretKey");
@@ -91,6 +91,9 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<ISwitchTypeRepository, SwitchTypeRepository>();
+builder.Services.AddScoped<ILayoutRepository, LayoutRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -102,6 +105,9 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<ISwitchTypeService, SwitchTypeService>();
+builder.Services.AddScoped<ILayoutService, LayoutService>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {

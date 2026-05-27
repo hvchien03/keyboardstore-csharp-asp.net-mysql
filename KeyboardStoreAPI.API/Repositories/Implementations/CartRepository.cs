@@ -18,6 +18,7 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
         {
             return await _context.CartItems
                 .Include(c => c.Product)
+                    .ThenInclude(p => p.ProductImages)
                 .Where(c => c.UserId == userId)
                 .OrderByDescending(c => c.UpdatedAt)
                 .ToListAsync();
@@ -27,6 +28,7 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
         {
             return await _context.CartItems
                 .Include(c => c.Product)
+                    .ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.ProductId == productId);
         }
 
@@ -37,6 +39,9 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
 
             await _context.Entry(cartItem)
                 .Reference(c => c.Product)
+                .LoadAsync();
+            await _context.Entry(cartItem.Product)
+                .Collection(p => p.ProductImages)
                 .LoadAsync();
 
             return cartItem;
@@ -49,6 +54,9 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
 
             await _context.Entry(cartItem)
                 .Reference(c => c.Product)
+                .LoadAsync();
+            await _context.Entry(cartItem.Product)
+                .Collection(p => p.ProductImages)
                 .LoadAsync();
 
             return cartItem;

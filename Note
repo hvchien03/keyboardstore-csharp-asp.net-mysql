@@ -2,9 +2,6 @@ user@test.com/User@123
 admin@keyboardstore.com/Admin@123
 "email": "chienvan1203@gmail.com", "password": "Chien@123",
 
-làm sao để đăng nhập vào admin thì thấy các api admin có thể dùng, đăng nhậpv ào user thì chỉ hiện các api
-user có thể dùng trong swagger
-
 Ngân hàng	NCB
 Số thẻ	9704198526191432198
 Tên chủ thẻ	NGUYEN VAN A
@@ -28,4 +25,4 @@ Plan
 2. làm phân trang cho nhưng trang chưa có  OK
 3. trang chủ phần danh mục nổi bật chưa link về đúng trang OK
 4. tại trang chủ khi chuyển sang đăng ký đăng nhập, phần header, footer hơi dịch chuyển sang phải nhìn rất khó chịu OK
-5. 
+5. sửa lại db OK

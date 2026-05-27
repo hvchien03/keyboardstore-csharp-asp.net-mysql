@@ -31,6 +31,16 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             await SendEmailAsync(toEmail, "Chào mừng đến Keyboard Store!", body);
         }
 
+        public async Task SendEmailVerificationAsync(string toEmail, string verificationLink)
+        {
+            var template = await File.ReadAllTextAsync("Templates/Email/EmailVerification.html");
+            var body = template
+                .Replace("{{UserEmail}}", toEmail)
+                .Replace("{{VerificationLink}}", verificationLink);
+
+            await SendEmailAsync(toEmail, "Xac minh email Keyboard Store", body);
+        }
+
         public async Task SendOrderConfirmationEmailAsync(int orderId, string toEmail)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);

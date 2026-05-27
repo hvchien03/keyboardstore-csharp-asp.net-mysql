@@ -19,10 +19,16 @@ namespace KeyboardStoreAPI.API.DTOs.Product
         [Range(0, int.MaxValue, ErrorMessage = "Stock cannot be negative")]
         public int Stock { get; set; }
 
-        [Url(ErrorMessage = "Invalid URL format")]
-        public string? ImageUrl { get; set; }
-
         [Required(ErrorMessage = "Category is required")]
         public int CategoryId { get; set; }
+
+        [Required(ErrorMessage = "Brand is required")]
+        public int BrandId { get; set; }
+
+        public int? SwitchTypeId { get; set; }
+
+        public int? LayoutId { get; set; }
+
+        public List<CreateProductImageDto> Images { get; set; } = new();
     }
 }

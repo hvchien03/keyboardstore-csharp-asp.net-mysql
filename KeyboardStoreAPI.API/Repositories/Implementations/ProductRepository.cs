@@ -18,6 +18,10 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
         {
             return await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.SwitchType)
+                .Include(p => p.Layout)
+                .Include(p => p.ProductImages.OrderBy(i => i.DisplayOrder))
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
         }
@@ -26,6 +30,10 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
         {
             var query = _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.SwitchType)
+                .Include(p => p.Layout)
+                .Include(p => p.ProductImages.OrderBy(i => i.DisplayOrder))
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filterParams.Keyword))
@@ -39,6 +47,21 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
             if (filterParams.CategoryId.HasValue)
             {
                 query = query.Where(p => p.CategoryId == filterParams.CategoryId.Value);
+            }
+
+            if (filterParams.BrandId.HasValue)
+            {
+                query = query.Where(p => p.BrandId == filterParams.BrandId.Value);
+            }
+
+            if (filterParams.SwitchTypeId.HasValue)
+            {
+                query = query.Where(p => p.SwitchTypeId == filterParams.SwitchTypeId.Value);
+            }
+
+            if (filterParams.LayoutId.HasValue)
+            {
+                query = query.Where(p => p.LayoutId == filterParams.LayoutId.Value);
             }
 
             if (filterParams.MinPrice.HasValue)
@@ -88,6 +111,10 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
         {
             return await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.SwitchType)
+                .Include(p => p.Layout)
+                .Include(p => p.ProductImages.OrderBy(i => i.DisplayOrder))
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -99,6 +126,18 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
             // Load category after creating
             await _context.Entry(product)
                 .Reference(p => p.Category)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Reference(p => p.Brand)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Reference(p => p.SwitchType)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Reference(p => p.Layout)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Collection(p => p.ProductImages)
                 .LoadAsync();
             
             return product;
@@ -112,6 +151,18 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
             // Load category after updating
             await _context.Entry(product)
                 .Reference(p => p.Category)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Reference(p => p.Brand)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Reference(p => p.SwitchType)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Reference(p => p.Layout)
+                .LoadAsync();
+            await _context.Entry(product)
+                .Collection(p => p.ProductImages)
                 .LoadAsync();
             
             return product;
@@ -135,6 +186,21 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
         public async Task<bool> CategoryExistsAsync(int categoryId)
         {
             return await _context.Categories.AnyAsync(c => c.Id == categoryId);
+        }
+
+        public async Task<bool> BrandExistsAsync(int brandId)
+        {
+            return await _context.Brands.AnyAsync(b => b.Id == brandId);
+        }
+
+        public async Task<bool> SwitchTypeExistsAsync(int switchTypeId)
+        {
+            return await _context.SwitchTypes.AnyAsync(s => s.Id == switchTypeId);
+        }
+
+        public async Task<bool> LayoutExistsAsync(int layoutId)
+        {
+            return await _context.Layouts.AnyAsync(l => l.Id == layoutId);
         }
     }
 }

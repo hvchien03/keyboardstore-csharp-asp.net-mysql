@@ -18,6 +18,10 @@ namespace KeyboardStoreAPI.API.Data
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<SwitchType> SwitchTypes { get; set; }
+        public DbSet<Layout> Layouts { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         /// <summary>
         /// Cấu hình các bảng, relationships, constraints
@@ -35,6 +39,7 @@ namespace KeyboardStoreAPI.API.Data
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.PasswordHash).IsRequired();
                 entity.Property(e => e.Role).HasMaxLength(20);
+                entity.Property(e => e.EmailVerificationTokenHash).HasMaxLength(128);
             });
 
             // Category
@@ -42,6 +47,28 @@ namespace KeyboardStoreAPI.API.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<Brand>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Name).IsUnique();
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<SwitchType>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Name).IsUnique();
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Layout>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Name).IsUnique();
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Percentage).IsRequired().HasMaxLength(10);
             });
 
             // Product
@@ -55,6 +82,32 @@ namespace KeyboardStoreAPI.API.Data
                       .WithMany(c => c.Products)
                       .HasForeignKey(e => e.CategoryId)
                       .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Brand)
+                      .WithMany(b => b.Products)
+                      .HasForeignKey(e => e.BrandId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.SwitchType)
+                      .WithMany(s => s.Products)
+                      .HasForeignKey(e => e.SwitchTypeId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(e => e.Layout)
+                      .WithMany(l => l.Products)
+                      .HasForeignKey(e => e.LayoutId)
+                      .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<ProductImage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Alt).HasMaxLength(200);
+
+                entity.HasOne(e => e.Product)
+                      .WithMany(p => p.ProductImages)
+                      .HasForeignKey(e => e.ProductId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Order

@@ -47,18 +47,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             // 2. Nếu không có cache, lấy từ database
             var products = await _productRepository.GetAllAsync();
 
-            var productDtos = products.Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                Stock = p.Stock,
-                ImageUrl = p.ImageUrl,
-                CategoryId = p.CategoryId,
-                CategoryName = p.Category?.Name ?? "Unknown",
-                CreatedAt = p.CreatedAt
-            }).ToList();
+            var productDtos = products.Select(MapToDto).ToList();
 
             // 3. Lưu vào cache cho lần sau
             await _cacheService.SetAsync(_productsCacheKey, productDtos, TimeSpan.FromMinutes(10));
@@ -85,18 +74,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             var products = allProducts
                 .Skip((paginationParams.Page - 1) * paginationParams.PageSize) // Bỏ qua các item trước
                 .Take(paginationParams.PageSize) // Lấy số lượng item của trang
-                .Select(p => new ProductDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    ImageUrl = p.ImageUrl,
-                    CategoryId = p.CategoryId,
-                    CategoryName = p.Category?.Name ?? "Unknown",
-                    CreatedAt = p.CreatedAt
-                })
+                .Select(MapToDto)
                 .ToList();
 
             return new PagedResult<ProductDto>
@@ -116,18 +94,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
 
             var pagedProducts = await _productRepository.GetFilteredAsync(filterParams);
             var products = pagedProducts.Data
-                .Select(p => new ProductDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    ImageUrl = p.ImageUrl,
-                    CategoryId = p.CategoryId,
-                    CategoryName = p.Category?.Name ?? "Unknown",
-                    CreatedAt = p.CreatedAt
-                })
+                .Select(MapToDto)
                 .ToList();
 
             return new PagedResult<ProductDto>
@@ -160,18 +127,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             }
 
 
-            var productDto = new ProductDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                Stock = product.Stock,
-                ImageUrl = product.ImageUrl,
-                CategoryId = product.CategoryId,
-                CategoryName = product.Category?.Name ?? "Unknown",
-                CreatedAt = product.CreatedAt
-            };
+            var productDto = MapToDto(product);
 
             // 3. Lưu vào cache
             await _cacheService.SetAsync(cacheKey, productDto, TimeSpan.FromMinutes(10));
@@ -189,14 +145,19 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 throw new NotFoundException("Category not found");
             }
 
+            await ValidateProductLookupsAsync(dto.BrandId, dto.SwitchTypeId, dto.LayoutId);
+
             var product = new Product
             {
                 Name = dto.Name,
                 Description = dto.Description,
                 Price = dto.Price,
                 Stock = dto.Stock,
-                ImageUrl = dto.ImageUrl,
                 CategoryId = dto.CategoryId,
+                BrandId = dto.BrandId,
+                SwitchTypeId = dto.SwitchTypeId,
+                LayoutId = dto.LayoutId,
+                ProductImages = MapProductImages(dto.Images),
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -205,18 +166,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             // XÓA CACHE SAU KHI TẠO MỚI (Cache Invalidation)
             await _cacheService.RemoveAsync(_productsCacheKey);
 
-            return new ProductDto
-            {
-                Id = createdProduct.Id,
-                Name = createdProduct.Name,
-                Description = createdProduct.Description,
-                Price = createdProduct.Price,
-                Stock = createdProduct.Stock,
-                ImageUrl = createdProduct.ImageUrl,
-                CategoryId = createdProduct.CategoryId,
-                CategoryName = createdProduct.Category?.Name ?? "Unknown",
-                CreatedAt = createdProduct.CreatedAt
-            };
+            return MapToDto(createdProduct);
         }
 
         // Update - XÓA CACHE SAU KHI CẬP NHẬT
@@ -234,6 +184,8 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 throw new NotFoundException("Category not found");
             }
 
+            await ValidateProductLookupsAsync(dto.BrandId, dto.SwitchTypeId, dto.LayoutId);
+
             var product = await _productRepository.GetByIdAsync(id);
             if (product == null)
             {
@@ -244,8 +196,16 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             product.Description = dto.Description;
             product.Price = dto.Price;
             product.Stock = dto.Stock;
-            product.ImageUrl = dto.ImageUrl;
             product.CategoryId = dto.CategoryId;
+            product.BrandId = dto.BrandId;
+            product.SwitchTypeId = dto.SwitchTypeId;
+            product.LayoutId = dto.LayoutId;
+            product.UpdatedAt = DateTime.UtcNow;
+            product.ProductImages.Clear();
+            foreach (var image in MapProductImages(dto.Images))
+            {
+                product.ProductImages.Add(image);
+            }
 
             var updatedProduct = await _productRepository.UpdateAsync(product);
 
@@ -253,18 +213,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             await _cacheService.RemoveAsync(_productsCacheKey); // Xóa cache danh sách
             await _cacheService.RemoveAsync($"{_productCachePrefix}{id}"); // Xóa cache chi tiết
 
-            return new ProductDto
-            {
-                Id = updatedProduct.Id,
-                Name = updatedProduct.Name,
-                Description = updatedProduct.Description,
-                Price = updatedProduct.Price,
-                Stock = updatedProduct.Stock,
-                ImageUrl = updatedProduct.ImageUrl,
-                CategoryId = updatedProduct.CategoryId,
-                CategoryName = updatedProduct.Category?.Name ?? "Unknown",
-                CreatedAt = updatedProduct.CreatedAt
-            };
+            return MapToDto(updatedProduct);
         }
 
         // Delete - XÓA CACHE SAU KHI XÓA
@@ -290,6 +239,69 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             {
                 throw new BadRequestException("Product price must be a whole VND amount");
             }
+        }
+
+        private async Task ValidateProductLookupsAsync(int brandId, int? switchTypeId, int? layoutId)
+        {
+            if (!await _productRepository.BrandExistsAsync(brandId))
+            {
+                throw new NotFoundException("Brand not found");
+            }
+
+            if (switchTypeId.HasValue && !await _productRepository.SwitchTypeExistsAsync(switchTypeId.Value))
+            {
+                throw new NotFoundException("Switch type not found");
+            }
+
+            if (layoutId.HasValue && !await _productRepository.LayoutExistsAsync(layoutId.Value))
+            {
+                throw new NotFoundException("Layout not found");
+            }
+        }
+
+        private static List<ProductImage> MapProductImages(IEnumerable<CreateProductImageDto> images)
+        {
+            return images
+                .Select(image => new ProductImage
+                {
+                    ImageUrl = image.ImageUrl.Trim(),
+                    Alt = image.Alt.Trim(),
+                    DisplayOrder = image.DisplayOrder,
+                    CreatedAt = DateTime.UtcNow
+                })
+                .ToList();
+        }
+
+        private static ProductDto MapToDto(Product product)
+        {
+            return new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Stock = product.Stock,
+                CategoryId = product.CategoryId,
+                CategoryName = product.Category?.Name ?? "Unknown",
+                BrandId = product.BrandId,
+                BrandName = product.Brand?.Name ?? "Unknown",
+                SwitchTypeId = product.SwitchTypeId,
+                SwitchTypeName = product.SwitchType?.Name,
+                LayoutId = product.LayoutId,
+                LayoutName = product.Layout?.Name,
+                Images = product.ProductImages
+                    .OrderBy(image => image.DisplayOrder)
+                    .Select(image => new ProductImageDto
+                    {
+                        Id = image.Id,
+                        ImageUrl = image.ImageUrl,
+                        Alt = image.Alt,
+                        DisplayOrder = image.DisplayOrder
+                    })
+                    .ToList(),
+                CreatedAt = product.CreatedAt,
+                UpdatedAt = product.UpdatedAt
+            };
         }
 
         private static void ValidateProductFilterParams(ProductFilterParams filterParams)

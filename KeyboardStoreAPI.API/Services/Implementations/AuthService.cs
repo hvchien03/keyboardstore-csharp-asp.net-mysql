@@ -1,13 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using KeyboardStoreAPI.API.DTOs.Auth;
+using KeyboardStoreAPI.API.Exceptions;
 using KeyboardStoreAPI.API.Models;
 using KeyboardStoreAPI.API.Repositories.Interfaces;
 using KeyboardStoreAPI.API.Services.Interfaces;
-using System.Security.Cryptography;
-using KeyboardStoreAPI.API.Exceptions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KeyboardStoreAPI.API.Services.Implementations
 {
@@ -18,7 +19,11 @@ namespace KeyboardStoreAPI.API.Services.Implementations
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IEmailService _emailService;
 
-        public AuthService(IUserRepository userRepository, IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AuthService(
+            IUserRepository userRepository,
+            IConfiguration configuration,
+            IRefreshTokenRepository refreshTokenRepository,
+            IEmailService emailService)
         {
             _userRepository = userRepository;
             _configuration = configuration;
@@ -28,125 +33,173 @@ namespace KeyboardStoreAPI.API.Services.Implementations
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
         {
-            // Validate email exists
             if (await _userRepository.ExistsByEmailAsync(dto.Email))
             {
                 throw new BadRequestException("Email already exists");
             }
 
-            // Validate password match
             if (dto.Password != dto.ConfirmPassword)
             {
                 throw new BadRequestException("Passwords do not match");
             }
 
-            // Validate password strength
             if (dto.Password.Length < 6)
             {
                 throw new BadRequestException("Password must be at least 6 characters");
             }
 
-            // Hash password
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
-            // Create user
+            var verificationToken = GenerateSecureToken();
             var user = new User
             {
-                Email = dto.Email,
-                PasswordHash = passwordHash,
+                Email = dto.Email.Trim(),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 Role = "User",
+                IsEmailVerified = false,
+                EmailVerificationTokenHash = HashToken(verificationToken),
+                EmailVerificationTokenExpiresAt = DateTime.UtcNow.AddHours(24),
                 CreatedAt = DateTime.UtcNow
             };
 
             await _userRepository.CreateAsync(user);
 
-            // Send welcome email
-            await _emailService.SendWelcomeEmailAsync(user.Email);
-
-            // Generate JWT token
-            var token = GenerateJwtToken(user);
-            var refreshToken = await GenerateRefreshToken(user.Id); // THÊM MỚI
-            var expiresAt = DateTime.UtcNow.AddMinutes(
-                int.Parse(_configuration["JwtSettings:ExpiryMinutes"]!)
-            );
+            var verificationLink = BuildEmailVerificationLink(user.Email, verificationToken);
+            await _emailService.SendEmailVerificationAsync(user.Email, verificationLink);
 
             return new AuthResponseDto
             {
-                Token = token,
-                RefreshToken = refreshToken, // THÊM MỚI
                 Email = user.Email,
                 Role = user.Role,
-                ExpiresAt = expiresAt
+                IsEmailVerified = user.IsEmailVerified,
+                RequiresEmailVerification = true,
+                Message = "Registration successful. Please check your email to verify your account."
             };
         }
 
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
         {
-            // Find user by email
             var user = await _userRepository.GetByEmailAsync(dto.Email);
             if (user == null)
             {
-                throw new UnauthorizedAccessException ("Invalid email or password");
+                throw new UnauthorizedAccessException("Invalid email or password");
             }
 
-            // Verify password
             if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
             {
-                throw new UnauthorizedAccessException ("Invalid email or password");
+                throw new UnauthorizedAccessException("Invalid email or password");
             }
 
-            // Generate JWT token
-            var token = GenerateJwtToken(user);
-            var refreshToken = await GenerateRefreshToken(user.Id); // THÊM MỚI
+            if (!user.IsEmailVerified)
+            {
+                throw new UnauthorizedAccessException("Please verify your email before logging in");
+            }
 
+            var token = GenerateJwtToken(user);
+            var refreshToken = await GenerateRefreshToken(user.Id);
             var expiresAt = DateTime.UtcNow.AddMinutes(
-                int.Parse(_configuration["JwtSettings:ExpiryMinutes"]!)
-            );
+                int.Parse(_configuration["JwtSettings:ExpiryMinutes"]!));
 
             return new AuthResponseDto
             {
                 Token = token,
-                RefreshToken = refreshToken, // THÊM MỚI
+                RefreshToken = refreshToken,
                 Email = user.Email,
                 Role = user.Role,
+                IsEmailVerified = user.IsEmailVerified,
                 ExpiresAt = expiresAt
             };
         }
 
-        // THÊM MỚI: Refresh Token
+        public async Task<bool> VerifyEmailAsync(string email, string token)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+            if (user == null)
+            {
+                throw new BadRequestException("Invalid verification link");
+            }
+
+            if (user.IsEmailVerified)
+            {
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(user.EmailVerificationTokenHash)
+                || !user.EmailVerificationTokenExpiresAt.HasValue
+                || user.EmailVerificationTokenExpiresAt.Value < DateTime.UtcNow)
+            {
+                throw new BadRequestException("Verification link has expired");
+            }
+
+            if (user.EmailVerificationTokenHash != HashToken(token))
+            {
+                throw new BadRequestException("Invalid verification link");
+            }
+
+            user.IsEmailVerified = true;
+            user.EmailVerifiedAt = DateTime.UtcNow;
+            user.EmailVerificationTokenHash = null;
+            user.EmailVerificationTokenExpiresAt = null;
+
+            await _userRepository.UpdateAsync(user);
+            await _emailService.SendWelcomeEmailAsync(user.Email);
+
+            return true;
+        }
+
+        public async Task<bool> ResendVerificationEmailAsync(string email)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            if (user.IsEmailVerified)
+            {
+                throw new BadRequestException("Email is already verified");
+            }
+
+            var verificationToken = GenerateSecureToken();
+            user.EmailVerificationTokenHash = HashToken(verificationToken);
+            user.EmailVerificationTokenExpiresAt = DateTime.UtcNow.AddHours(24);
+
+            await _userRepository.UpdateAsync(user);
+
+            var verificationLink = BuildEmailVerificationLink(user.Email, verificationToken);
+            await _emailService.SendEmailVerificationAsync(user.Email, verificationLink);
+
+            return true;
+        }
+
         public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
         {
-            // 1. Tìm token trong database
             var storedToken = await _refreshTokenRepository.GetByTokenAsync(refreshToken);
-
-            // 2. Validate token
             if (storedToken == null)
             {
-                throw new UnauthorizedAccessException ("Invalid refresh token");
+                throw new UnauthorizedAccessException("Invalid refresh token");
             }
 
             if (storedToken.IsRevoked)
             {
-                throw new UnauthorizedAccessException ("Refresh token has been revoked");
+                throw new UnauthorizedAccessException("Refresh token has been revoked");
             }
 
             if (storedToken.ExpiresAt < DateTime.UtcNow)
             {
-                throw new UnauthorizedAccessException ("Refresh token has expired");
+                throw new UnauthorizedAccessException("Refresh token has expired");
             }
 
-            // 3. Token hợp lệ → Tạo Access Token mới
             var user = storedToken.User;
-            var newAccessToken = GenerateJwtToken(user);
+            if (!user.IsEmailVerified)
+            {
+                throw new UnauthorizedAccessException("Please verify your email before refreshing token");
+            }
 
-            // 4. (Optional) Tạo Refresh Token mới và thu hồi token cũ (Refresh Token Rotation)
-            // Tăng bảo mật: mỗi lần refresh, token cũ bị vô hiệu hóa
+            var newAccessToken = GenerateJwtToken(user);
             var newRefreshToken = await GenerateRefreshToken(user.Id);
-            await _refreshTokenRepository.RevokeAsync(refreshToken); // Thu hồi token cũ
+            await _refreshTokenRepository.RevokeAsync(refreshToken);
 
             var expiresAt = DateTime.UtcNow.AddMinutes(
-                int.Parse(_configuration["JwtSettings:ExpiryMinutes"]!)
-            );
+                int.Parse(_configuration["JwtSettings:ExpiryMinutes"]!));
 
             return new AuthResponseDto
             {
@@ -154,11 +207,11 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 RefreshToken = newRefreshToken,
                 Email = user.Email,
                 Role = user.Role,
+                IsEmailVerified = user.IsEmailVerified,
                 ExpiresAt = expiresAt
             };
         }
 
-        // THÊM MỚI: Thu hồi Refresh Token (Logout)
         public async Task<bool> RevokeTokenAsync(string refreshToken)
         {
             return await _refreshTokenRepository.RevokeAsync(refreshToken);
@@ -185,29 +238,45 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 audience: jwtSettings["Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["ExpiryMinutes"]!)),
-                signingCredentials: credentials
-            );
+                signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        // THÊM MỚI: Tạo Refresh Token ngẫu nhiên
-        private async Task<string> GenerateRefreshToken(int userId)
+        private string BuildEmailVerificationLink(string email, string token)
         {
-            // Tạo chuỗi ngẫu nhiên 64 bytes
+            var apiBaseUrl = _configuration["AppSettings:ApiBaseUrl"];
+            if (string.IsNullOrWhiteSpace(apiBaseUrl))
+            {
+                apiBaseUrl = "http://localhost:5143";
+            }
+
+            return $"{apiBaseUrl.TrimEnd('/')}/api/Auth/verify-email?email={WebUtility.UrlEncode(email)}&token={WebUtility.UrlEncode(token)}";
+        }
+
+        private static string GenerateSecureToken()
+        {
             var randomBytes = new byte[64];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomBytes);
-            
-            // Convert sang Base64 string
-            var token = Convert.ToBase64String(randomBytes);
 
-            // Lưu vào database
+            return Convert.ToBase64String(randomBytes);
+        }
+
+        private static string HashToken(string token)
+        {
+            var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));
+            return Convert.ToHexString(bytes);
+        }
+
+        private async Task<string> GenerateRefreshToken(int userId)
+        {
+            var token = GenerateSecureToken();
             var refreshToken = new RefreshToken
             {
                 UserId = userId,
                 Token = token,
-                ExpiresAt = DateTime.UtcNow.AddDays(7), // Hết hạn sau 7 ngày
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
                 CreatedAt = DateTime.UtcNow
             };
 

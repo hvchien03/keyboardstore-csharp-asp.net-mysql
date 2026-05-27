@@ -164,7 +164,10 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 Id = cartItem.Id,
                 ProductId = cartItem.ProductId,
                 ProductName = cartItem.Product?.Name ?? "Unknown",
-                ImageUrl = cartItem.Product?.ImageUrl,
+                ImageUrl = cartItem.Product?.ProductImages
+                    .OrderBy(image => image.DisplayOrder)
+                    .FirstOrDefault()
+                    ?.ImageUrl,
                 Price = cartItem.Product?.Price ?? 0,
                 Quantity = cartItem.Quantity,
                 Stock = cartItem.Product?.Stock ?? 0,

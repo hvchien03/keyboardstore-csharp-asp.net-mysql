@@ -19,10 +19,16 @@ namespace KeyboardStoreAPI.API.DTOs.Product
         [Range(0, int.MaxValue)]
         public int Stock { get; set; }
 
-        [Url]
-        public string? ImageUrl { get; set; }
-
         [Required]
         public int CategoryId { get; set; }
+
+        [Required]
+        public int BrandId { get; set; }
+
+        public int? SwitchTypeId { get; set; }
+
+        public int? LayoutId { get; set; }
+
+        public List<CreateProductImageDto> Images { get; set; } = new();
     }
 }

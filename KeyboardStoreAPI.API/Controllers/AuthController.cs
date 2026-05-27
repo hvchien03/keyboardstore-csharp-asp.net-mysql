@@ -36,6 +36,20 @@ namespace KeyboardStoreAPI.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("verify-email")]
+        public async Task<IActionResult> VerifyEmail([FromQuery] string email, [FromQuery] string token)
+        {
+            await _authService.VerifyEmailAsync(email, token);
+            return Ok(new { message = "Email verified successfully" });
+        }
+
+        [HttpPost("resend-verification-email")]
+        public async Task<IActionResult> ResendVerificationEmail([FromBody] ResendVerificationEmailDto dto)
+        {
+            await _authService.ResendVerificationEmailAsync(dto.Email);
+            return Ok(new { message = "Verification email sent" });
+        }
+
         // THÊM MỚI: Endpoint refresh token
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto dto)

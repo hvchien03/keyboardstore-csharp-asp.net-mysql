@@ -22,13 +22,16 @@ namespace KeyboardStoreAPI.API.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("KeyboardStoreAPI.API.Models.Category", b =>
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -41,7 +44,10 @@ namespace KeyboardStoreAPI.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.CartItem", b =>
@@ -77,6 +83,58 @@ namespace KeyboardStoreAPI.API.Migrations
                     b.ToTable("CartItems");
                 });
 
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.Layout", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Percentage")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Layouts");
+                });
+
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -88,6 +146,10 @@ namespace KeyboardStoreAPI.API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Note")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
                     b.Property<DateTime?>("PaidAt")
                         .HasColumnType("datetime(6)");
 
@@ -98,10 +160,6 @@ namespace KeyboardStoreAPI.API.Migrations
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("ShippingAddress")
                         .IsRequired()
@@ -176,6 +234,9 @@ namespace KeyboardStoreAPI.API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -186,8 +247,8 @@ namespace KeyboardStoreAPI.API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("longtext");
+                    b.Property<int?>("LayoutId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -200,11 +261,56 @@ namespace KeyboardStoreAPI.API.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SwitchTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("LayoutId");
+
+                    b.HasIndex("SwitchTypeId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Alt")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.RefreshToken", b =>
@@ -245,6 +351,31 @@ namespace KeyboardStoreAPI.API.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.SwitchType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SwitchTypes");
+                });
+
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -260,6 +391,19 @@ namespace KeyboardStoreAPI.API.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("EmailVerificationTokenExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EmailVerificationTokenHash")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<DateTime?>("EmailVerifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsEmailVerified")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -329,13 +473,46 @@ namespace KeyboardStoreAPI.API.Migrations
 
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.Product", b =>
                 {
+                    b.HasOne("KeyboardStoreAPI.API.Models.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("KeyboardStoreAPI.API.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("KeyboardStoreAPI.API.Models.Layout", "Layout")
+                        .WithMany("Products")
+                        .HasForeignKey("LayoutId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("KeyboardStoreAPI.API.Models.SwitchType", "SwitchType")
+                        .WithMany("Products")
+                        .HasForeignKey("SwitchTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Brand");
+
                     b.Navigation("Category");
+
+                    b.Navigation("Layout");
+
+                    b.Navigation("SwitchType");
+                });
+
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.ProductImage", b =>
+                {
+                    b.HasOne("KeyboardStoreAPI.API.Models.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.RefreshToken", b =>
@@ -349,7 +526,17 @@ namespace KeyboardStoreAPI.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.Brand", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.Layout", b =>
                 {
                     b.Navigation("Products");
                 });
@@ -364,6 +551,13 @@ namespace KeyboardStoreAPI.API.Migrations
                     b.Navigation("CartItems");
 
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductImages");
+                });
+
+            modelBuilder.Entity("KeyboardStoreAPI.API.Models.SwitchType", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("KeyboardStoreAPI.API.Models.User", b =>
