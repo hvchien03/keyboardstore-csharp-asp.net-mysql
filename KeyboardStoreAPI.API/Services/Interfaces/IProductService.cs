@@ -8,9 +8,12 @@ namespace KeyboardStoreAPI.API.Services.Interfaces
         Task<IEnumerable<ProductDto>> GetAllProductsAsync();
         Task<PagedResult<ProductDto>> GetProductsPagedAsync(PaginationParams paginationParams);
         Task<PagedResult<ProductDto>> SearchProductsAsync(ProductFilterParams filterParams);
+        Task<PagedResult<ProductDto>> GetProductsWithoutImagesAsync(ProductFilterParams filterParams);
         Task<ProductDto?> GetProductByIdAsync(int id);
         Task<ProductDto> CreateProductAsync(CreateProductDto dto);
         Task<ProductDto> UpdateProductAsync(int id, UpdateProductDto dto);
+        Task<ProductDto> AddProductImagesAsync(int id, IEnumerable<IFormFile> files);
+        Task<bool> DeleteProductImageAsync(int id, int imageId);
         Task<bool> DeleteProductAsync(int id);
     }
 }

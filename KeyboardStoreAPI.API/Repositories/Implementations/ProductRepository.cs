@@ -107,6 +107,89 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
             };
         }
 
+        public async Task<PagedResult<Product>> GetWithoutImagesAsync(ProductFilterParams filterParams)
+        {
+            var query = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.SwitchType)
+                .Include(p => p.Layout)
+                .Include(p => p.ProductImages.OrderBy(i => i.DisplayOrder))
+                .Where(p => !p.ProductImages.Any())
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filterParams.Keyword))
+            {
+                var keyword = filterParams.Keyword.Trim();
+                query = query.Where(p =>
+                    p.Name.Contains(keyword)
+                    || p.Description.Contains(keyword)
+                    || p.Brand.Name.Contains(keyword));
+            }
+
+            if (filterParams.CategoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == filterParams.CategoryId.Value);
+            }
+
+            if (filterParams.BrandId.HasValue)
+            {
+                query = query.Where(p => p.BrandId == filterParams.BrandId.Value);
+            }
+
+            if (filterParams.SwitchTypeId.HasValue)
+            {
+                query = query.Where(p => p.SwitchTypeId == filterParams.SwitchTypeId.Value);
+            }
+
+            if (filterParams.LayoutId.HasValue)
+            {
+                query = query.Where(p => p.LayoutId == filterParams.LayoutId.Value);
+            }
+
+            if (filterParams.MinPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= filterParams.MinPrice.Value);
+            }
+
+            if (filterParams.MaxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= filterParams.MaxPrice.Value);
+            }
+
+            if (filterParams.InStock.HasValue)
+            {
+                query = filterParams.InStock.Value
+                    ? query.Where(p => p.Stock > 0)
+                    : query.Where(p => p.Stock == 0);
+            }
+
+            query = filterParams.SortBy?.ToLowerInvariant() switch
+            {
+                "price_asc" => query.OrderBy(p => p.Price),
+                "price_desc" => query.OrderByDescending(p => p.Price),
+                "name" => query.OrderBy(p => p.Name),
+                "oldest" => query.OrderBy(p => p.CreatedAt),
+                _ => query.OrderByDescending(p => p.CreatedAt)
+            };
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)filterParams.PageSize);
+            var products = await query
+                .Skip((filterParams.Page - 1) * filterParams.PageSize)
+                .Take(filterParams.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<Product>
+            {
+                Data = products,
+                Page = filterParams.Page,
+                PageSize = filterParams.PageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages
+            };
+        }
+
         public async Task<Product?> GetByIdAsync(int id)
         {
             return await _context.Products
@@ -166,6 +249,52 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
                 .LoadAsync();
             
             return product;
+        }
+
+        public async Task<Product> AddImagesAsync(int productId, IEnumerable<ProductImage> images)
+        {
+            var product = await GetByIdAsync(productId);
+            if (product == null)
+            {
+                throw new InvalidOperationException("Product not found");
+            }
+
+            foreach (var image in images)
+            {
+                product.ProductImages.Add(image);
+            }
+
+            product.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
+
+        public async Task<ProductImage?> GetImageAsync(int productId, int imageId)
+        {
+            return await _context.ProductImages
+                .FirstOrDefaultAsync(image => image.ProductId == productId && image.Id == imageId);
+        }
+
+        public async Task<bool> DeleteImageAsync(int productId, int imageId)
+        {
+            var product = await GetByIdAsync(productId);
+            if (product == null)
+            {
+                return false;
+            }
+
+            var image = product.ProductImages.FirstOrDefault(item => item.Id == imageId);
+            if (image == null)
+            {
+                return false;
+            }
+
+            product.ProductImages.Remove(image);
+            product.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> DeleteAsync(int id)

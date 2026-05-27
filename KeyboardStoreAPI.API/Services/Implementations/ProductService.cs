@@ -10,6 +10,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
     {
         private readonly IProductRepository _productRepository;
         private readonly ICacheService _cacheService;
+        private readonly IUploadService _uploadService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<ProductService> _logger;
 
@@ -20,11 +21,13 @@ namespace KeyboardStoreAPI.API.Services.Implementations
         public ProductService(
             IProductRepository productRepository,
             ICacheService cacheService,
+            IUploadService uploadService,
             IConfiguration configuration,
             ILogger<ProductService> logger)
         {
             _productRepository = productRepository;
             _cacheService = cacheService;
+            _uploadService = uploadService;
             _configuration = configuration;
             _logger = logger;
 
@@ -107,6 +110,25 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             };
         }
 
+        public async Task<PagedResult<ProductDto>> GetProductsWithoutImagesAsync(ProductFilterParams filterParams)
+        {
+            ValidateProductFilterParams(filterParams);
+
+            var pagedProducts = await _productRepository.GetWithoutImagesAsync(filterParams);
+            var products = pagedProducts.Data
+                .Select(MapToDto)
+                .ToList();
+
+            return new PagedResult<ProductDto>
+            {
+                Data = products,
+                Page = pagedProducts.Page,
+                PageSize = pagedProducts.PageSize,
+                TotalCount = pagedProducts.TotalCount,
+                TotalPages = pagedProducts.TotalPages
+            };
+        }
+
         public async Task<ProductDto?> GetProductByIdAsync(int id)
         {
             var cacheKey = $"{_productCachePrefix}{id}"; // "product:1", "product:2"...
@@ -157,7 +179,6 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 BrandId = dto.BrandId,
                 SwitchTypeId = dto.SwitchTypeId,
                 LayoutId = dto.LayoutId,
-                ProductImages = MapProductImages(dto.Images),
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -201,11 +222,6 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             product.SwitchTypeId = dto.SwitchTypeId;
             product.LayoutId = dto.LayoutId;
             product.UpdatedAt = DateTime.UtcNow;
-            product.ProductImages.Clear();
-            foreach (var image in MapProductImages(dto.Images))
-            {
-                product.ProductImages.Add(image);
-            }
 
             var updatedProduct = await _productRepository.UpdateAsync(product);
 
@@ -217,6 +233,72 @@ namespace KeyboardStoreAPI.API.Services.Implementations
         }
 
         // Delete - XÓA CACHE SAU KHI XÓA
+        public async Task<ProductDto> AddProductImagesAsync(int id, IEnumerable<IFormFile> files)
+        {
+            var fileList = files.ToList();
+            if (!fileList.Any())
+            {
+                throw new BadRequestException("At least one image file is required");
+            }
+
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                throw new NotFoundException("Product not found");
+            }
+
+            var nextDisplayOrder = product.ProductImages.Any()
+                ? product.ProductImages.Max(image => image.DisplayOrder) + 1
+                : 1;
+
+            var productImages = new List<ProductImage>();
+            foreach (var file in fileList)
+            {
+                var imageUrl = await _uploadService.UploadProductImageAsync(file);
+                productImages.Add(new ProductImage
+                {
+                    ImageUrl = imageUrl,
+                    Alt = product.Name,
+                    DisplayOrder = nextDisplayOrder++,
+                    CreatedAt = DateTime.UtcNow
+                });
+            }
+
+            var updatedProduct = await _productRepository.AddImagesAsync(id, productImages);
+
+            await _cacheService.RemoveAsync(_productsCacheKey);
+            await _cacheService.RemoveAsync($"{_productCachePrefix}{id}");
+
+            return MapToDto(updatedProduct);
+        }
+
+        public async Task<bool> DeleteProductImageAsync(int id, int imageId)
+        {
+            if (!await _productRepository.ExistsAsync(id))
+            {
+                throw new NotFoundException("Product not found");
+            }
+
+            var image = await _productRepository.GetImageAsync(id, imageId);
+            if (image == null)
+            {
+                throw new NotFoundException("Product image not found");
+            }
+
+            var imageUrl = image.ImageUrl;
+            var deleted = await _productRepository.DeleteImageAsync(id, imageId);
+            if (!deleted)
+            {
+                throw new NotFoundException("Product image not found");
+            }
+
+            await _uploadService.DeleteProductImageAsync(imageUrl);
+            await _cacheService.RemoveAsync(_productsCacheKey);
+            await _cacheService.RemoveAsync($"{_productCachePrefix}{id}");
+
+            return true;
+        }
+
         public async Task<bool> DeleteProductAsync(int id)
         {
             if (!await _productRepository.ExistsAsync(id))
@@ -257,19 +339,6 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             {
                 throw new NotFoundException("Layout not found");
             }
-        }
-
-        private static List<ProductImage> MapProductImages(IEnumerable<CreateProductImageDto> images)
-        {
-            return images
-                .Select(image => new ProductImage
-                {
-                    ImageUrl = image.ImageUrl.Trim(),
-                    Alt = image.Alt.Trim(),
-                    DisplayOrder = image.DisplayOrder,
-                    CreatedAt = DateTime.UtcNow
-                })
-                .ToList();
         }
 
         private static ProductDto MapToDto(Product product)

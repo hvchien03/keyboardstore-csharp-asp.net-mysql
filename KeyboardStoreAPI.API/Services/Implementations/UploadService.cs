@@ -47,5 +47,44 @@ namespace KeyboardStoreAPI.API.Services.Implementations
 
             return $"/uploads/products/{fileName}";
         }
+
+        public Task DeleteProductImageAsync(string imageUrl)
+        {
+            if (string.IsNullOrWhiteSpace(imageUrl))
+            {
+                return Task.CompletedTask;
+            }
+
+            const string uploadUrlPrefix = "/uploads/products/";
+            if (!imageUrl.StartsWith(uploadUrlPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return Task.CompletedTask;
+            }
+
+            var fileName = Path.GetFileName(imageUrl);
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return Task.CompletedTask;
+            }
+
+            var webRootPath = _environment.WebRootPath
+                ?? Path.Combine(_environment.ContentRootPath, "wwwroot");
+            var uploadFolder = Path.Combine(webRootPath, "uploads", "products");
+            var filePath = Path.Combine(uploadFolder, fileName);
+            var fullUploadFolder = Path.GetFullPath(uploadFolder);
+            var fullFilePath = Path.GetFullPath(filePath);
+
+            if (!fullFilePath.StartsWith(fullUploadFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                return Task.CompletedTask;
+            }
+
+            if (File.Exists(fullFilePath))
+            {
+                File.Delete(fullFilePath);
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

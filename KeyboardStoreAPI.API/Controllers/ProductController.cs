@@ -42,6 +42,15 @@ namespace KeyboardStoreAPI.API.Controllers
             return Ok(products);
         }
 
+        [HttpGet("without-images")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetWithoutImages([FromQuery] ProductFilterParams filterParams)
+        {
+            var products = await _productService.GetProductsWithoutImagesAsync(filterParams);
+
+            return Ok(products);
+        }
+
         /// <summary>
         /// Get product by ID
         /// </summary>
@@ -72,6 +81,22 @@ namespace KeyboardStoreAPI.API.Controllers
         {
             var product = await _productService.UpdateProductAsync(id, dto);
             return Ok(product);
+        }
+
+        [HttpPost("{id}/images")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddImages(int id, [FromForm] List<IFormFile> files)
+        {
+            var product = await _productService.AddProductImagesAsync(id, files);
+            return Ok(product);
+        }
+
+        [HttpDelete("{id}/images/{imageId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteImage(int id, int imageId)
+        {
+            await _productService.DeleteProductImageAsync(id, imageId);
+            return NoContent();
         }
 
         /// <summary>

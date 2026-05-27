@@ -28,7 +28,5 @@ namespace KeyboardStoreAPI.API.DTOs.Product
         public int? SwitchTypeId { get; set; }
 
         public int? LayoutId { get; set; }
-
-        public List<CreateProductImageDto> Images { get; set; } = new();
     }
 }

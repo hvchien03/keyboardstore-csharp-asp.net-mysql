@@ -1,4 +1,4 @@
-namespace KeyboardStoreAPI.API.Models
+namespace KeyboardStoreAPI.API.Models.Entities
 {
     public class CartItem
     {
