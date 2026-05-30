@@ -10,6 +10,16 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(body),
     });
 
+    if (!auth.token || !auth.refreshToken) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: auth.message ?? "Please verify your email before logging in",
+        },
+        { status: 401 },
+      );
+    }
+
     await setAuthCookies(auth.token, auth.refreshToken);
 
     return NextResponse.json({

@@ -26,6 +26,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
 
         public async Task<CartDto> GetCartAsync(int userId)
         {
+            await _cartRepository.RemovePaidOrderItemsAsync(userId);
             var cartItems = await _cartRepository.GetByUserIdAsync(userId);
 
             return MapToCartDto(cartItems);

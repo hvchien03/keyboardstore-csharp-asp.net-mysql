@@ -10,11 +10,19 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    await setAuthCookies(auth.token, auth.refreshToken);
+    if (auth.token && auth.refreshToken && auth.isEmailVerified) {
+      await setAuthCookies(auth.token, auth.refreshToken);
+    }
 
     return NextResponse.json({
       success: true,
-      data: { email: auth.email, role: auth.role, expiresAt: auth.expiresAt },
+      data: {
+        email: auth.email,
+        role: auth.role,
+        isEmailVerified: auth.isEmailVerified,
+        requiresEmailVerification: auth.requiresEmailVerification,
+        message: auth.message,
+      },
     });
   } catch (error) {
     return toErrorResponse(error);

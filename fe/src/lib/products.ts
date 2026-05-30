@@ -1,4 +1,11 @@
-import type { Category, PagedResult, Product } from "@/types/api";
+import type {
+  Brand,
+  Category,
+  KeyboardLayout,
+  PagedResult,
+  Product,
+  SwitchType,
+} from "@/types/api";
 
 const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5143";
 const ASSET_BASE_URL =
@@ -31,6 +38,17 @@ export function normalizeImageUrl(path?: string | null): string {
   return `${ASSET_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+export function getProductImageUrl(product: Product) {
+  return normalizeImageUrl(product.images?.[0]?.imageUrl);
+}
+
+export function shouldBypassImageOptimization(src: string) {
+  return src.startsWith("http://localhost")
+    || src.startsWith("https://localhost")
+    || src.startsWith("http://127.0.0.1")
+    || src.startsWith("https://127.0.0.1");
+}
+
 async function publicFetch<T>(path: string, revalidate = 60): Promise<T> {
   const res = await fetch(`${API_BASE_URL}${path}`, {
     next: { revalidate },
@@ -47,6 +65,9 @@ type ProductQuery = {
   page?: number;
   pageSize?: number;
   categoryId?: number;
+  brandId?: number;
+  switchTypeId?: number;
+  layoutId?: number;
   keyword?: string;
   sortBy?: string;
 };
@@ -89,6 +110,9 @@ export async function getProducts(
   });
 
   if (query.categoryId) params.set("categoryId", String(query.categoryId));
+  if (query.brandId) params.set("brandId", String(query.brandId));
+  if (query.switchTypeId) params.set("switchTypeId", String(query.switchTypeId));
+  if (query.layoutId) params.set("layoutId", String(query.layoutId));
   if (query.keyword) params.set("keyword", query.keyword);
   if (query.sortBy) params.set("sortBy", query.sortBy);
 
@@ -124,6 +148,30 @@ export async function getCategories() {
     return await publicFetch<Category[]>("/api/Category", 300);
   } catch {
     return sampleCategories;
+  }
+}
+
+export async function getBrands() {
+  try {
+    return await publicFetch<Brand[]>("/api/Brand", 300);
+  } catch {
+    return sampleBrands;
+  }
+}
+
+export async function getSwitchTypes() {
+  try {
+    return await publicFetch<SwitchType[]>("/api/SwitchType", 300);
+  } catch {
+    return sampleSwitchTypes;
+  }
+}
+
+export async function getLayouts() {
+  try {
+    return await publicFetch<KeyboardLayout[]>("/api/Layout", 300);
+  } catch {
+    return sampleLayouts;
   }
 }
 
@@ -178,6 +226,24 @@ export const sampleCategories: Category[] = [
   },
 ];
 
+export const sampleBrands: Brand[] = [
+  { id: 1, name: "Keyframe", description: "Premium keyboard engineering." },
+  { id: 2, name: "Akko", description: "Colorful enthusiast keyboards." },
+  { id: 3, name: "Keychron", description: "Wireless mechanical keyboards." },
+];
+
+export const sampleSwitchTypes: SwitchType[] = [
+  { id: 1, name: "Linear", description: "Smooth key travel." },
+  { id: 2, name: "Tactile", description: "Noticeable tactile bump." },
+  { id: 3, name: "Clicky", description: "Audible click feedback." },
+];
+
+export const sampleLayouts: KeyboardLayout[] = [
+  { id: 1, name: "60%", percentage: "60", description: "Compact layout." },
+  { id: 2, name: "75%", percentage: "75", description: "Compact with function row." },
+  { id: 3, name: "TKL", percentage: "80", description: "Tenkeyless layout." },
+];
+
 export const sampleProducts: Product[] = [
   {
     id: 1,
@@ -185,9 +251,15 @@ export const sampleProducts: Product[] = [
     description: "Case nhom nguyen khoi, gasket mount, hot-swap.",
     price: 3490000,
     stock: 18,
-    imageUrl: "/images/products/keyboard-base.jpg",
     categoryId: 1,
     categoryName: "Custom Keyboards",
+    brandId: 1,
+    brandName: "Keyframe",
+    switchTypeId: 1,
+    switchTypeName: "Linear",
+    layoutId: 2,
+    layoutName: "75%",
+    images: [{ id: 1, imageUrl: "/images/products/keyboard-base.jpg", alt: "KFE-V1 Aluminum Base", displayOrder: 1 }],
   },
   {
     id: 2,
@@ -195,9 +267,15 @@ export const sampleProducts: Product[] = [
     description: "Luc nhan 45g, hanh trinh 3.8mm, pack 35 switch.",
     price: 450000,
     stock: 64,
-    imageUrl: "/images/products/silent-linear-switch.jpg",
     categoryId: 2,
     categoryName: "Switches",
+    brandId: 1,
+    brandName: "Keyframe",
+    switchTypeId: 1,
+    switchTypeName: "Linear",
+    layoutId: null,
+    layoutName: null,
+    images: [{ id: 2, imageUrl: "/images/products/silent-linear-switch.jpg", alt: "KFE Silent Linear Switch", displayOrder: 1 }],
   },
   {
     id: 3,
@@ -205,9 +283,15 @@ export const sampleProducts: Product[] = [
     description: "PBT double-shot, Cherry profile, day du layout pho bien.",
     price: 990000,
     stock: 24,
-    imageUrl: "/images/products/bow-keycaps.jpg",
     categoryId: 3,
     categoryName: "Keycaps",
+    brandId: 1,
+    brandName: "Keyframe",
+    switchTypeId: null,
+    switchTypeName: null,
+    layoutId: null,
+    layoutName: null,
+    images: [{ id: 3, imageUrl: "/images/products/bow-keycaps.jpg", alt: "BoW Minimalist Keycaps", displayOrder: 1 }],
   },
   {
     id: 4,
@@ -215,8 +299,14 @@ export const sampleProducts: Product[] = [
     description: "USB-C to USB-A, boc du ben, dau aviator kim loai.",
     price: 550000,
     stock: 39,
-    imageUrl: "/images/products/aviator-cable.jpg",
     categoryId: 4,
     categoryName: "Accessories",
+    brandId: 1,
+    brandName: "Keyframe",
+    switchTypeId: null,
+    switchTypeName: null,
+    layoutId: null,
+    layoutName: null,
+    images: [{ id: 4, imageUrl: "/images/products/aviator-cable.jpg", alt: "Premium Aviator Cable", displayOrder: 1 }],
   },
 ];

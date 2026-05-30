@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import type { ApiError } from "@/types/api";
+import type { ApiError, AuthResponse } from "@/types/api";
 
 const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5143";
 const AUTH_COOKIE_NAME = process.env.AUTH_COOKIE_NAME ?? "keyboard_access_token";
@@ -40,6 +40,26 @@ export async function setAuthCookies(token: string, refreshToken: string) {
   });
 }
 
+async function refreshAccessToken() {
+  const refreshToken = await getRefreshToken();
+  if (!refreshToken) return null;
+
+  const res = await fetch(`${API_BASE_URL}/api/Auth/refresh-token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken }),
+    cache: "no-store",
+  });
+
+  if (!res.ok) return null;
+
+  const auth = (await res.json()) as AuthResponse;
+  if (!auth.token || !auth.refreshToken) return null;
+
+  await setAuthCookies(auth.token, auth.refreshToken);
+  return auth.token;
+}
+
 export async function clearAuthCookies() {
   const store = await cookies();
   store.delete(AUTH_COOKIE_NAME);
@@ -49,21 +69,24 @@ export async function clearAuthCookies() {
 export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
   const { auth = false, headers, ...init } = options;
   const token = auth ? await getAccessToken() : undefined;
-  const requestHeaders = new Headers(headers);
+  const requestHeaders = buildRequestHeaders(headers, init.body, token);
 
-  if (!requestHeaders.has("Content-Type") && init.body) {
-    requestHeaders.set("Content-Type", "application/json");
-  }
-
-  if (token) {
-    requestHeaders.set("Authorization", `Bearer ${token}`);
-  }
-
-  const res = await fetch(`${API_BASE_URL}${path}`, {
+  let res = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
     headers: requestHeaders,
     cache: auth || init.method ? "no-store" : init.cache,
   });
+
+  if (auth && res.status === 401) {
+    const newToken = await refreshAccessToken();
+    if (newToken) {
+      res = await fetch(`${API_BASE_URL}${path}`, {
+        ...init,
+        headers: buildRequestHeaders(headers, init.body, newToken),
+        cache: "no-store",
+      });
+    }
+  }
 
   if (res.status === 204) {
     return undefined as T;
@@ -78,7 +101,9 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
     const message =
       body && typeof body === "object" && "message" in body
         ? String((body as { message?: string }).message)
-        : "Request failed";
+        : res.status === 401
+          ? "Phien dang nhap da het han, vui long dang nhap lai"
+          : "Request failed";
 
     throw {
       message,
@@ -91,6 +116,24 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}) {
   }
 
   return body as T;
+}
+
+function buildRequestHeaders(
+  headers: HeadersInit | undefined,
+  body: BodyInit | null | undefined,
+  token?: string,
+) {
+  const requestHeaders = new Headers(headers);
+
+  if (!requestHeaders.has("Content-Type") && body) {
+    requestHeaders.set("Content-Type", "application/json");
+  }
+
+  if (token) {
+    requestHeaders.set("Authorization", `Bearer ${token}`);
+  }
+
+  return requestHeaders;
 }
 
 export function toErrorResponse(error: unknown) {

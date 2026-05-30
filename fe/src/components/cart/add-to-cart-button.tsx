@@ -4,6 +4,13 @@ import { ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import type { Cart } from "@/types/api";
+
+type CartResponse = {
+  success: boolean;
+  data?: Cart;
+  message?: string;
+};
 
 export function AddToCartButton({
   productId,
@@ -27,7 +34,7 @@ export function AddToCartButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId, quantity }),
       });
-      const json = await res.json();
+      const json = (await res.json()) as CartResponse;
 
       if (!res.ok || !json.success) {
         if (res.status === 401) {
@@ -38,6 +45,11 @@ export function AddToCartButton({
       }
 
       toast.success(`Da them ${productName} vao gio hang`);
+      window.dispatchEvent(
+        new CustomEvent("cart:updated", {
+          detail: { totalItems: json.data?.totalItems },
+        }),
+      );
       router.refresh();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Co loi xay ra");

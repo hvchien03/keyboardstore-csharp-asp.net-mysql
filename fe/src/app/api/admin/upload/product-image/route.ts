@@ -5,6 +5,17 @@ const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5143";
 
 export async function POST(req: NextRequest) {
   try {
+    const productId = req.nextUrl.searchParams.get("productId");
+    if (!productId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "productId is required. Use /api/admin/products/{id}/images.",
+        },
+        { status: 400 },
+      );
+    }
+
     const token = await getAccessToken();
     if (!token) {
       return NextResponse.json(
@@ -13,8 +24,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const formData = await req.formData();
-    const res = await fetch(`${API_BASE_URL}/api/Upload/product-image`, {
+    const incomingFormData = await req.formData();
+    const files = incomingFormData.getAll("file");
+    const formData = new FormData();
+    files.forEach((file) => formData.append("files", file));
+
+    const res = await fetch(`${API_BASE_URL}/api/Product/${productId}/images`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

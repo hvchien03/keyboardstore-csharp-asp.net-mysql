@@ -6,12 +6,23 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { formatCurrency } from "@/lib/format";
-import { normalizeImageUrl } from "@/lib/products";
+import {
+  normalizeImageUrl,
+  shouldBypassImageOptimization,
+} from "@/lib/products";
 import type { Cart, CartItem } from "@/types/api";
+
+type CartResponse = {
+  success: boolean;
+  data?: Cart;
+  message?: string;
+};
 
 export function CartManager({ cart }: { cart: Cart }) {
   const router = useRouter();
+  const [deleteItem, setDeleteItem] = useState<CartItem | null>(null);
   const [pendingId, setPendingId] = useState<number | null>(null);
 
   async function updateItem(item: CartItem, quantity: number) {
@@ -23,8 +34,13 @@ export function CartManager({ cart }: { cart: Cart }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity }),
       });
-      const json = await res.json();
+      const json = (await res.json()) as CartResponse;
       if (!res.ok || !json.success) throw new Error(json.message);
+      window.dispatchEvent(
+        new CustomEvent("cart:updated", {
+          detail: { totalItems: json.data?.totalItems },
+        }),
+      );
       router.refresh();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Khong the cap nhat");
@@ -39,14 +55,16 @@ export function CartManager({ cart }: { cart: Cart }) {
       const res = await fetch(`/api/cart/items/${productId}`, {
         method: "DELETE",
       });
-      const json = await res.json();
+      const json = (await res.json()) as CartResponse;
       if (!res.ok || !json.success) throw new Error(json.message);
       toast.success("Da xoa san pham khoi gio hang");
+      window.dispatchEvent(new CustomEvent("cart:updated"));
       router.refresh();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Khong the xoa");
     } finally {
       setPendingId(null);
+      setDeleteItem(null);
     }
   }
 
@@ -73,6 +91,10 @@ export function CartManager({ cart }: { cart: Cart }) {
     <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
       <section className="lg:col-span-8">
         {cart.items.map((item) => (
+          (() => {
+            const imageUrl = normalizeImageUrl(item.imageUrl);
+
+            return (
           <div
             className="group flex flex-col items-start border-b border-border-subtle py-6 sm:flex-row sm:items-center"
             key={item.id}
@@ -82,7 +104,8 @@ export function CartManager({ cart }: { cart: Cart }) {
                 alt={item.productName}
                 className="object-contain p-3"
                 fill
-                src={normalizeImageUrl(item.imageUrl)}
+                src={imageUrl}
+                unoptimized={shouldBypassImageOptimization(imageUrl)}
               />
             </div>
             <div className="flex flex-1 flex-col gap-4 sm:ml-6 sm:flex-row sm:items-center sm:justify-between">
@@ -119,7 +142,7 @@ export function CartManager({ cart }: { cart: Cart }) {
                 <button
                   className="text-secondary transition-colors hover:text-red-600"
                   disabled={pendingId === item.productId}
-                  onClick={() => removeItem(item.productId)}
+                  onClick={() => setDeleteItem(item)}
                   type="button"
                 >
                   <Trash2 size={20} />
@@ -130,6 +153,8 @@ export function CartManager({ cart }: { cart: Cart }) {
               </p>
             </div>
           </div>
+            );
+          })()
         ))}
       </section>
 
@@ -161,6 +186,19 @@ export function CartManager({ cart }: { cart: Cart }) {
           </Link>
         </div>
       </aside>
+      <ConfirmDialog
+        description={
+          deleteItem
+            ? `Ban co chac muon xoa "${deleteItem.productName}" khoi gio hang khong?`
+            : ""
+        }
+        isPending={deleteItem ? pendingId === deleteItem.productId : false}
+        onCancel={() => setDeleteItem(null)}
+        onConfirm={() => {
+          if (deleteItem) void removeItem(deleteItem.productId);
+        }}
+        open={Boolean(deleteItem)}
+      />
     </div>
   );
 }

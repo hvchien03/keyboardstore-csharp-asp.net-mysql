@@ -1,11 +1,12 @@
-import { Search, ShoppingCart, UserRound } from "lucide-react";
+import { Search, UserRound } from "lucide-react";
 import Link from "next/link";
+import { CartNavLink } from "./cart-nav-link";
 
 const navItems = [
   { label: "Trang chu", href: "/" },
-  { label: "Custom Keyboards", href: "/products" },
-  { label: "Switches", href: "/categories/2" },
-  { label: "Keycaps", href: "/categories/3" },
+  { label: "Custom Keyboards", href: "/categories/1" },
+  { label: "Switches", href: "/categories/3" },
+  { label: "Keycaps", href: "/categories/2" },
   { label: "Accessories", href: "/categories/4" },
 ];
 
@@ -33,13 +34,23 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-4 text-primary-container md:gap-6">
-          <Link
-            aria-label="Tim kiem"
-            className="transition-transform hover:scale-95"
-            href="/products"
-          >
-            <Search size={22} />
-          </Link>
+          <form action="/products" className="hidden items-center gap-2 md:flex" method="get">
+            <input
+              className="h-9 w-44 rounded-full border border-border-subtle bg-surface-white px-3 text-sm text-on-surface outline-none focus:border-primary-container"
+              name="keyword"
+              placeholder="Tim san pham"
+              type="search"
+            />
+            <button aria-label="Tim kiem" className="transition-transform hover:scale-95" type="submit">
+              <Search size={22} />
+            </button>
+          </form>
+          <form action="/products" className="md:hidden" method="get">
+            <input className="sr-only" name="keyword" placeholder="Tim san pham" type="search" />
+            <button aria-label="Tim kiem" className="transition-transform hover:scale-95" type="submit">
+              <Search size={22} />
+            </button>
+          </form>
           <Link
             aria-label="Tai khoan"
             className="transition-transform hover:scale-95"
@@ -47,16 +58,7 @@ export function SiteHeader() {
           >
             <UserRound size={22} />
           </Link>
-          <Link
-            aria-label="Gio hang"
-            className="relative transition-transform hover:scale-95"
-            href="/cart"
-          >
-            <ShoppingCart size={22} />
-            <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary-container text-[10px] font-medium text-on-primary">
-              0
-            </span>
-          </Link>
+          <CartNavLink />
         </div>
       </nav>
     </header>

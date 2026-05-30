@@ -3,7 +3,10 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { CheckoutForm } from "@/components/forms/checkout-form";
 import { formatCurrency } from "@/lib/format";
-import { normalizeImageUrl } from "@/lib/products";
+import {
+  normalizeImageUrl,
+  shouldBypassImageOptimization,
+} from "@/lib/products";
 import { apiFetch } from "@/lib/server-api";
 import type { Cart } from "@/types/api";
 
@@ -43,13 +46,18 @@ export default async function CheckoutPage() {
             </h2>
             <div className="space-y-4">
               {cart.items.map((item) => (
+                (() => {
+                  const imageUrl = normalizeImageUrl(item.imageUrl);
+
+                  return (
                 <div className="flex gap-4" key={item.id}>
                   <div className="relative h-20 w-20 overflow-hidden rounded border border-border-subtle bg-surface-container-low">
                     <Image
                       alt={item.productName}
                       className="object-contain p-2"
                       fill
-                      src={normalizeImageUrl(item.imageUrl)}
+                      src={imageUrl}
+                      unoptimized={shouldBypassImageOptimization(imageUrl)}
                     />
                   </div>
                   <div className="flex-1">
@@ -62,6 +70,8 @@ export default async function CheckoutPage() {
                     {formatCurrency(item.subtotal)}
                   </span>
                 </div>
+                  );
+                })()
               ))}
             </div>
             <div className="my-6 border-t border-border-subtle" />

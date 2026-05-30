@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Pagination } from "@/components/product/pagination";
 import { ProductCard } from "@/components/product/product-card";
-import { getProducts, resolveCategory, slugify } from "@/lib/products";
+import { ProductSortSelect } from "@/components/product/product-sort-select";
+import {
+  getBrands,
+  getLayouts,
+  getProducts,
+  getSwitchTypes,
+  resolveCategory,
+  slugify,
+} from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Ban phim co custom",
@@ -11,15 +20,43 @@ export const metadata: Metadata = {
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; page?: string; sortBy?: string }>;
+  searchParams: Promise<{
+    brandId?: string;
+    category?: string;
+    layoutId?: string;
+    page?: string;
+    keyword?: string;
+    sortBy?: string;
+    switchTypeId?: string;
+  }>;
 }) {
-  const { category, page: pageParam, sortBy } = await searchParams;
+  const {
+    brandId,
+    category,
+    layoutId,
+    keyword,
+    page: pageParam,
+    sortBy,
+    switchTypeId,
+  } = await searchParams;
   const currentCategory = await resolveCategory(category);
   const page = Number(pageParam ?? 1);
+  const selectedBrandId = toPositiveNumber(brandId);
+  const selectedSwitchTypeId = toPositiveNumber(switchTypeId);
+  const selectedLayoutId = toPositiveNumber(layoutId);
+  const [brands, switchTypes, layouts] = await Promise.all([
+    getBrands(),
+    getSwitchTypes(),
+    getLayouts(),
+  ]);
   const products = await getProducts({
     page: Number.isFinite(page) && page > 0 ? page : 1,
     pageSize: 12,
     categoryId: currentCategory?.id,
+    brandId: selectedBrandId,
+    switchTypeId: selectedSwitchTypeId,
+    layoutId: selectedLayoutId,
+    keyword,
     sortBy,
   });
 
@@ -37,16 +74,28 @@ export default async function ProductsPage({
 
       <div className="flex flex-col gap-gutter md:flex-row">
         <aside className="w-full shrink-0 space-y-8 md:w-64">
-          <FilterGroup
-            options={["Linear", "Tactile", "Clicky", "Silent"]}
+          <FilterLinkGroup
+            activeId={selectedSwitchTypeId}
+            basePath="/products"
+            items={switchTypes.map((item) => ({ id: item.id, label: item.name }))}
+            paramName="switchTypeId"
+            searchParams={{ brandId, category, keyword, layoutId, sortBy }}
             title="Loai Switch"
           />
-          <FilterGroup
-            options={["60%", "65%", "75%", "TKL (80%)", "Full Size (100%)"]}
+          <FilterLinkGroup
+            activeId={selectedLayoutId}
+            basePath="/products"
+            items={layouts.map((item) => ({ id: item.id, label: item.name }))}
+            paramName="layoutId"
+            searchParams={{ brandId, category, keyword, sortBy, switchTypeId }}
             title="Layout"
           />
-          <FilterGroup
-            options={["Keychron", "Akko", "Epomaker", "Varmilo"]}
+          <FilterLinkGroup
+            activeId={selectedBrandId}
+            basePath="/products"
+            items={brands.map((item) => ({ id: item.id, label: item.name }))}
+            paramName="brandId"
+            searchParams={{ category, keyword, layoutId, sortBy, switchTypeId }}
             title="Thuong Hieu"
           />
           <div className="border-t border-border-subtle pt-6">
@@ -76,12 +125,7 @@ export default async function ProductsPage({
             </span>
             <label className="flex items-center gap-2 text-body-md text-secondary">
               Sap xep theo:
-              <select className="rounded border border-border-subtle bg-surface-white px-2 py-1 text-body-md text-on-surface focus:border-primary-container">
-                <option>Moi nhat</option>
-                <option>Gia tang dan</option>
-                <option>Gia giam dan</option>
-                <option>Ban chay</option>
-              </select>
+              <ProductSortSelect value={sortBy} />
             </label>
           </div>
 
@@ -101,8 +145,12 @@ export default async function ProductsPage({
             basePath="/products"
             currentPage={products.page}
             searchParams={{
+              brandId,
               category: currentCategory ? slugify(currentCategory.name) : undefined,
+              keyword,
+              layoutId,
               sortBy,
+              switchTypeId,
             }}
             totalPages={products.totalPages}
           />
@@ -112,25 +160,68 @@ export default async function ProductsPage({
   );
 }
 
-function FilterGroup({ title, options }: { title: string; options: string[] }) {
+function FilterLinkGroup({
+  activeId,
+  basePath,
+  items,
+  paramName,
+  searchParams,
+  title,
+}: {
+  activeId?: number;
+  basePath: string;
+  items: Array<{ id: number; label: string }>;
+  paramName: string;
+  searchParams: Record<string, string | undefined>;
+  title: string;
+}) {
   return (
     <div className="border-t border-border-subtle pt-6 first:border-t-0 first:pt-0">
       <h3 className="mb-4 text-label-bold font-semibold uppercase tracking-wider text-on-surface">
         {title}
       </h3>
-      <div className="space-y-3">
-        {options.map((option) => (
-          <label className="group flex cursor-pointer items-center gap-3" key={option}>
-            <input
-              className="h-5 w-5 rounded border-border-subtle text-primary-container accent-primary-container"
-              type="checkbox"
-            />
-            <span className="text-body-md text-secondary transition-colors group-hover:text-on-surface">
-              {option}
-            </span>
-          </label>
+      <div className="space-y-2">
+        {activeId ? (
+          <Link
+            className="block rounded px-3 py-2 text-body-md text-primary-container hover:bg-surface-container-low"
+            href={buildFilterHref(basePath, searchParams)}
+          >
+            Tat ca
+          </Link>
+        ) : null}
+        {items.map((item) => (
+          <Link
+            className={`block rounded px-3 py-2 text-body-md transition-colors ${
+              activeId === item.id
+                ? "bg-surface-container-low text-primary-container"
+                : "text-secondary hover:bg-surface-container-low hover:text-on-surface"
+            }`}
+            href={buildFilterHref(basePath, {
+              ...searchParams,
+              [paramName]: String(item.id),
+            })}
+            key={item.id}
+          >
+            {item.label}
+          </Link>
         ))}
       </div>
     </div>
   );
+}
+
+function buildFilterHref(
+  basePath: string,
+  searchParams: Record<string, string | undefined>,
+) {
+  const params = new URLSearchParams();
+  Object.entries(searchParams).forEach(([key, value]) => {
+    if (value) params.set(key, value);
+  });
+  return params.size ? `${basePath}?${params.toString()}` : basePath;
+}
+
+function toPositiveNumber(value?: string) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : undefined;
 }

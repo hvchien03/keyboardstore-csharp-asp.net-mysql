@@ -4,16 +4,50 @@ export interface Category {
   description: string;
 }
 
+export interface Brand {
+  id: number;
+  name: string;
+  description: string;
+  createdAt?: string;
+}
+
+export interface SwitchType {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export interface KeyboardLayout {
+  id: number;
+  name: string;
+  percentage: string;
+  description: string;
+}
+
+export interface ProductImage {
+  id: number;
+  imageUrl: string;
+  alt: string;
+  displayOrder: number;
+}
+
 export interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
   stock: number;
-  imageUrl?: string | null;
   categoryId: number;
   categoryName: string;
+  brandId: number;
+  brandName: string;
+  switchTypeId?: number | null;
+  switchTypeName?: string | null;
+  layoutId?: number | null;
+  layoutName?: string | null;
+  images: ProductImage[];
   createdAt?: string;
+  updatedAt?: string | null;
 }
 
 export interface PagedResult<T> {
@@ -44,11 +78,14 @@ export interface Cart {
 }
 
 export interface AuthResponse {
-  token: string;
-  refreshToken: string;
+  token?: string;
+  refreshToken?: string;
   email: string;
   role: string;
-  expiresAt: string;
+  isEmailVerified: boolean;
+  requiresEmailVerification: boolean;
+  message?: string;
+  expiresAt?: string;
 }
 
 export interface User {

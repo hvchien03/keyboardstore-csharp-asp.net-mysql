@@ -3,10 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { formatCurrency } from "@/lib/format";
-import { normalizeImageUrl } from "@/lib/products";
+import {
+  getProductImageUrl,
+  shouldBypassImageOptimization,
+} from "@/lib/products";
 import type { Product } from "@/types/api";
 
 export function ProductCard({ product }: { product: Product }) {
+  const imageUrl = getProductImageUrl(product);
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-lg border border-border-subtle bg-surface-white transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
       <Link
@@ -18,7 +23,8 @@ export function ProductCard({ product }: { product: Product }) {
           className="object-contain transition-transform duration-500 group-hover:scale-105"
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-          src={normalizeImageUrl(product.imageUrl)}
+          src={imageUrl}
+          unoptimized={shouldBypassImageOptimization(imageUrl)}
         />
         <div className="absolute left-3 top-3 flex flex-col gap-1">
           <span className="rounded bg-surface-container-low px-2 py-1 text-label-sm font-medium text-on-surface">
@@ -41,7 +47,7 @@ export function ProductCard({ product }: { product: Product }) {
           </h3>
         </Link>
         <p className="mb-4 line-clamp-2 flex-1 text-body-md text-secondary">
-          {product.description || product.categoryName}
+          {product.description || `${product.brandName} · ${product.categoryName}`}
         </p>
         <div className="mt-auto flex items-center justify-between">
           <span className="text-headline-md font-semibold text-on-surface">

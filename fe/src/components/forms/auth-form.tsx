@@ -37,8 +37,17 @@ export function AuthForm({ mode }: { mode: Mode }) {
       if (!res.ok || !json.success) {
         throw new Error(json.message ?? "Khong the xac thuc");
       }
+
+      if (mode === "register" && json.data?.requiresEmailVerification) {
+        toast.success("Dang ky thanh cong. Vui long xac minh email.");
+        router.push(
+          `/verify-email-pending?email=${encodeURIComponent(json.data.email)}`,
+        );
+        return;
+      }
+
       toast.success(mode === "login" ? "Dang nhap thanh cong" : "Dang ky thanh cong");
-      router.push("/");
+      router.push(json.data?.role === "Admin" ? "/admin" : "/");
       router.refresh();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Co loi xay ra");

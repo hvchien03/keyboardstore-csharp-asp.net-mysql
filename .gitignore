@@ -19,9 +19,4 @@ appsettings.Local.json
 *.lscache
 
 # Local notes / AI workflow docs
-/AI_CODING_GUIDE.md
-/Flow_WebApi
-/Note
-/KeyboardStoreAPI.API/Add_NewTable
-/UI/
 /docs/

@@ -9,6 +9,8 @@ namespace KeyboardStoreAPI.API.Repositories.Interfaces
         Task<CartItem> AddAsync(CartItem cartItem);
         Task<CartItem> UpdateAsync(CartItem cartItem);
         Task<bool> RemoveAsync(int userId, int productId);
+        Task<int> RemoveItemsAsync(int userId, IEnumerable<int> productIds);
+        Task<int> RemovePaidOrderItemsAsync(int userId);
         Task ClearAsync(int userId);
     }
 }

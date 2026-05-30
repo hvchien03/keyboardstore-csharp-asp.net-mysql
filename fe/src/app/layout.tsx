@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { AppChrome } from "@/components/layout/app-chrome";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,9 +20,7 @@ export default function RootLayout({
   return (
     <html lang="vi" className="h-full antialiased">
       <body className="flex min-h-full flex-col bg-background text-on-background">
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <AppChrome>{children}</AppChrome>
         <Toaster richColors position="top-right" />
       </body>
     </html>

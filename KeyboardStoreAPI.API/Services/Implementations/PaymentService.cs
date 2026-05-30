@@ -14,17 +14,20 @@ namespace KeyboardStoreAPI.API.Services.Implementations
 
         private readonly IConfiguration _configuration;
         private readonly IOrderRepository _orderRepository;
+        private readonly ICartRepository _cartRepository;
         private readonly ILogger<PaymentService> _logger;
         private readonly IEmailService _emailService;
 
         public PaymentService(
             IConfiguration configuration,
             IOrderRepository orderRepository,
+            ICartRepository cartRepository,
             ILogger<PaymentService> logger,
             IEmailService emailService)
         {
             _configuration = configuration;
             _orderRepository = orderRepository;
+            _cartRepository = cartRepository;
             _logger = logger;
             _emailService = emailService;
         }
@@ -100,6 +103,8 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             {
                 if (order.PaymentStatus == PaymentStatuses.Paid)
                 {
+                    await RemovePaidProductsFromCartAsync(order);
+
                     return new PaymentResponseDto
                     {
                         Success = true,
@@ -114,6 +119,22 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             }
 
             return await MarkPaymentAsFailedAsync(order, amount, responseCode);
+        }
+
+        public async Task ClearPaidOrderItemsFromCartAsync(int orderId, int userId)
+        {
+            var order = await GetOrderAsync(orderId);
+            if (order.UserId != userId)
+            {
+                throw new UnauthorizedAccessException("You can only check your own order");
+            }
+
+            if (order.PaymentStatus != PaymentStatuses.Paid)
+            {
+                return;
+            }
+
+            await RemovePaidProductsFromCartAsync(order);
         }
 
         private static VNPayLibrary BuildVNPayResponse(IQueryCollection queryCollection)
@@ -150,9 +171,10 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             order.PaymentStatus = PaymentStatuses.Paid;
             order.TransactionId = transactionId;
             order.PaidAt = DateTime.UtcNow;
-            order.Status = OrderStatuses.Processing;
+            order.Status = OrderStatuses.Pending;
 
             await _orderRepository.UpdateAsync(order);
+            await RemovePaidProductsFromCartAsync(order);
 
             _logger.LogInformation(
                 "Order {OrderId} paid successfully. Transaction: {TransactionId}",
@@ -169,6 +191,23 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 OrderId = order.Id,
                 Amount = amount
             };
+        }
+
+        private async Task RemovePaidProductsFromCartAsync(Order order)
+        {
+            var paidProductIds = order.OrderDetails
+                .Select(orderDetail => orderDetail.ProductId)
+                .ToList();
+
+            var removedCount = await _cartRepository.RemoveItemsAsync(order.UserId, paidProductIds);
+            if (removedCount > 0)
+            {
+                _logger.LogInformation(
+                    "Removed {Count} paid cart item(s) for user {UserId} after order {OrderId} payment",
+                    removedCount,
+                    order.UserId,
+                    order.Id);
+            }
         }
 
         private async Task<PaymentResponseDto> MarkPaymentAsFailedAsync(

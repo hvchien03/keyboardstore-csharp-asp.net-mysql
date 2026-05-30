@@ -6,5 +6,6 @@ namespace KeyboardStoreAPI.API.Services.Interfaces
     {
         string CreateVNPayPaymentUrl(int orderId, decimal amount, string orderInfo);
         Task<PaymentResponseDto> ProcessVNPayReturn(IQueryCollection queryCollection);
+        Task ClearPaidOrderItemsFromCartAsync(int orderId, int userId);
     }
 }

@@ -72,6 +72,7 @@ namespace KeyboardStoreAPI.API.Controllers
         {
             var userId = GetCurrentUserId();
             var order = await _orderService.GetOrderByIdAsync(orderId, userId);
+            await _paymentService.ClearPaidOrderItemsFromCartAsync(orderId, userId);
 
             return Ok(new
             {

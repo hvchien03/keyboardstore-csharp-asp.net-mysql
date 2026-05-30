@@ -1,4 +1,5 @@
 using KeyboardStoreAPI.API.Data;
+using KeyboardStoreAPI.API.Constants;
 using KeyboardStoreAPI.API.Models;
 using KeyboardStoreAPI.API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,68 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<int> RemoveItemsAsync(int userId, IEnumerable<int> productIds)
+        {
+            var productIdList = productIds.Distinct().ToList();
+            if (!productIdList.Any())
+            {
+                return 0;
+            }
+
+            var cartItems = await _context.CartItems
+                .Where(c => c.UserId == userId && productIdList.Contains(c.ProductId))
+                .ToListAsync();
+
+            if (!cartItems.Any())
+            {
+                return 0;
+            }
+
+            _context.CartItems.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+
+            return cartItems.Count;
+        }
+
+        public async Task<int> RemovePaidOrderItemsAsync(int userId)
+        {
+            var paidProductIds = await _context.Orders
+                .Where(order => order.UserId == userId
+                    && order.PaymentStatus == PaymentStatuses.Paid
+                    && order.PaidAt.HasValue)
+                .SelectMany(order => order.OrderDetails.Select(detail => new
+                {
+                    detail.ProductId,
+                    PaidAt = order.PaidAt!.Value
+                }))
+                .ToListAsync();
+
+            if (!paidProductIds.Any())
+            {
+                return 0;
+            }
+
+            var cartItems = await _context.CartItems
+                .Where(cartItem => cartItem.UserId == userId)
+                .ToListAsync();
+
+            var itemsToRemove = cartItems
+                .Where(cartItem => paidProductIds.Any(paidItem =>
+                    paidItem.ProductId == cartItem.ProductId
+                    && cartItem.CreatedAt <= paidItem.PaidAt))
+                .ToList();
+
+            if (!itemsToRemove.Any())
+            {
+                return 0;
+            }
+
+            _context.CartItems.RemoveRange(itemsToRemove);
+            await _context.SaveChangesAsync();
+
+            return itemsToRemove.Count;
         }
 
         public async Task ClearAsync(int userId)

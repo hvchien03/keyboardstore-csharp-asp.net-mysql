@@ -1,11 +1,14 @@
 import { Check, Heart, Truck } from "lucide-react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductCard } from "@/components/product/product-card";
 import { formatCurrency } from "@/lib/format";
-import { getLatestProducts, getProduct, normalizeImageUrl } from "@/lib/products";
+import {
+  getLatestProducts,
+  getProduct,
+} from "@/lib/products";
 
 export async function generateMetadata({
   params,
@@ -36,39 +39,7 @@ export default async function ProductDetailPage({
   return (
     <main className="mx-auto w-full max-w-[1200px] flex-grow px-4 py-10 md:px-8 md:py-16">
       <section className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-        <div>
-          <div className="relative flex aspect-[4/3] cursor-crosshair items-center justify-center overflow-hidden rounded-lg border border-border-subtle bg-surface-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
-            <Image
-              alt={product.name}
-              className="object-contain"
-              fill
-              priority
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              src={normalizeImageUrl(product.imageUrl)}
-            />
-          </div>
-          <div className="mt-4 grid grid-cols-4 gap-4">
-            {[0, 1, 2, 3].map((item) => (
-              <div
-                className={
-                  item === 0
-                    ? "aspect-square rounded-lg border-2 border-primary-container bg-surface-white p-2"
-                    : "aspect-square rounded-lg border border-border-subtle bg-surface-white p-2 opacity-60"
-                }
-                key={item}
-              >
-                <div className="relative h-full w-full">
-                  <Image
-                    alt={product.name}
-                    className="object-contain"
-                    fill
-                    src={normalizeImageUrl(product.imageUrl)}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ProductGallery images={product.images} productName={product.name} />
 
         <div className="flex flex-col">
           <span className="mb-3 text-label-bold font-semibold uppercase tracking-wide text-primary-container">
@@ -84,7 +55,11 @@ export default async function ProductDetailPage({
           <div className="mb-8 h-px w-full bg-border-subtle" />
 
           <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {["Hot-swap", "Wireless Ready", "CNC Case"].map((option) => (
+            {[
+              product.brandName,
+              product.switchTypeName ?? "Hot-swap",
+              product.layoutName ?? "Keyboard kit",
+            ].map((option) => (
               <div
                 className="rounded-lg border border-border-subtle bg-surface-white p-4 transition-colors hover:bg-surface-container-low"
                 key={option}

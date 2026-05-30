@@ -95,3 +95,20 @@ img {
 .admin-input:focus {
   border-color: #ff6700;
 }
+
+select.admin-input {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #64748b 50%),
+    linear-gradient(135deg, #64748b 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-repeat: no-repeat;
+  background-size: 5px 5px, 5px 5px;
+  padding-right: 2.5rem;
+}
+
+select.admin-input:hover {
+  border-color: #cbd5e1;
+}
