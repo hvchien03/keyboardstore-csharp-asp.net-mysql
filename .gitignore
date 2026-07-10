@@ -21,3 +21,8 @@ appsettings.Local.json
 
 # Local notes / AI workflow docs
 /docs/
+
+# Local Docker storage (giữ lại storage/uploads cho ảnh demo)
+storage/mysql/
+storage/redis/
+storage/logs/
