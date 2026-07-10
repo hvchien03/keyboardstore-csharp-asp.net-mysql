@@ -73,12 +73,12 @@ export default async function ProductDetailPage({
 
           <div className="mb-8 grid gap-3 text-body-md text-secondary">
             <p className="flex items-center gap-2">
-              <Check className="text-success-green" size={18} /> Ton kho:{" "}
+              <Check className="text-success-green" size={18} /> Tồn kho:{" "}
               {product.stock}
             </p>
             <p className="flex items-center gap-2">
-              <Truck className="text-primary-container" size={18} /> Giao hang
-              nhanh trong 2-4 ngay
+              <Truck className="text-primary-container" size={18} /> Giao hàng
+              nhanh trong 2-4 ngày
             </p>
           </div>
 
@@ -89,7 +89,7 @@ export default async function ProductDetailPage({
               productName={product.name}
             />
             <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-on-background px-6 py-4 text-label-bold font-semibold text-on-background transition-colors hover:bg-surface-container-low">
-              <Heart size={18} /> Yeu thich
+              <Heart size={18} /> Yêu thích
             </button>
           </div>
         </div>
@@ -97,7 +97,7 @@ export default async function ProductDetailPage({
 
       <section className="mt-section-padding">
         <h2 className="mb-10 text-center text-headline-md font-semibold text-on-surface">
-          Dinh cao thiet ke ky thuat
+          Định cao thiết kế kỹ thuật
         </h2>
         <div className="grid grid-cols-1 gap-gutter md:grid-cols-2">
           <InfoCard title="Gasket Mount Design" />
@@ -109,7 +109,7 @@ export default async function ProductDetailPage({
 
       <section className="mt-section-padding">
         <h2 className="mb-8 text-headline-md font-semibold text-on-surface">
-          San pham lien quan
+          Sản phẩm liên quan
         </h2>
         <div className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-4">
           {related.map((item) => (
@@ -128,8 +128,8 @@ function InfoCard({ title }: { title: string }) {
         {title}
       </h3>
       <p className="text-body-md text-secondary">
-        Cau truc duoc tinh chinh de mang lai cam giac go chac, am thanh gon va
-        do ben dung chat ban phim co cao cap.
+        Cấu trúc được tinh chỉnh để mang lại cảm giác gõ chắc, âm thanh gọn và 
+        độ bền dùng chất bàn phím cơ cao cấp.
       </p>
     </article>
   );

@@ -64,11 +64,11 @@ export default async function ProductsPage({
     <main className="mx-auto w-full max-w-container-max flex-grow px-margin-mobile py-section-padding md:px-8">
       <div className="mb-12">
         <h1 className="mb-4 text-display-lg-mobile font-bold text-on-surface md:text-display-lg">
-          {currentCategory?.name ?? "Ban Phim Co Custom"}
+          {currentCategory?.name ?? "Bàn Phím Cơ Custom"}
         </h1>
         <p className="max-w-2xl text-body-lg text-text-muted">
           {currentCategory?.description ??
-            "Kham pha bo suu tap ban phim co cao cap duoc thiet ke tinh xao, mang lai trai nghiem go phim hoan hao va am thanh doc dao."}
+            "Khám phá bộ sưu tập bàn phím cơ cao cấp được thiết kế tinh xảo, mang lại trải nghiệm gõ phím hoàn hảo và âm thanh độc đáo."}
         </p>
       </div>
 
@@ -100,7 +100,7 @@ export default async function ProductsPage({
           />
           <div className="border-t border-border-subtle pt-6">
             <h3 className="mb-4 text-label-bold font-semibold uppercase tracking-wider text-on-surface">
-              Khoang Gia
+              Khoảng Giá
             </h3>
             <div className="space-y-4">
               <input
@@ -120,11 +120,11 @@ export default async function ProductsPage({
         <section className="flex-1">
           <div className="mb-6 flex flex-col justify-between gap-3 border-b border-border-subtle pb-4 sm:flex-row sm:items-center">
             <span className="text-body-md text-secondary">
-              Hien thi {products.data.length} trong {products.totalCount} san
-              pham
+              Hiển thị {products.data.length} trong {products.totalCount} sản
+              phẩm
             </span>
             <label className="flex items-center gap-2 text-body-md text-secondary">
-              Sap xep theo:
+              Sắp xếp theo:
               <ProductSortSelect value={sortBy} />
             </label>
           </div>
@@ -136,7 +136,7 @@ export default async function ProductsPage({
               ))
             ) : (
               <div className="rounded-lg border border-border-subtle bg-surface-white p-8 text-center text-secondary sm:col-span-2 lg:col-span-3">
-                Chua co san pham trong danh muc nay.
+                Chưa có sản phẩm trong danh mục này.
               </div>
             )}
           </div>
@@ -186,7 +186,7 @@ function FilterLinkGroup({
             className="block rounded px-3 py-2 text-body-md text-primary-container hover:bg-surface-container-low"
             href={buildFilterHref(basePath, searchParams)}
           >
-            Tat ca
+            Tất cả
           </Link>
         ) : null}
         {items.map((item) => (

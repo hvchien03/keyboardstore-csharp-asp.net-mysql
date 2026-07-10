@@ -31,11 +31,11 @@ export function ProductSortSelect({ value }: { value?: string }) {
       disabled={isPending}
       onChange={(event) => updateSort(event.target.value)}
     >
-      <option value="">Moi nhat</option>
-      <option value="name">Ten A-Z</option>
-      <option value="price_asc">Gia tang dan</option>
-      <option value="price_desc">Gia giam dan</option>
-      <option value="oldest">Cu nhat</option>
+      <option value="">Mới nhất</option>
+      <option value="name">ên A-Z</option>
+      <option value="price_asc">Giá tăng dần</option>
+      <option value="price_desc">Giá giảm dần</option>
+      <option value="oldest">Cũ nhất</option>
     </select>
   );
 }

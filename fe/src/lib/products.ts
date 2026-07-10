@@ -7,9 +7,10 @@ import type {
   SwitchType,
 } from "@/types/api";
 
-const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5143";
-const ASSET_BASE_URL =
-  process.env.NEXT_PUBLIC_API_ASSET_URL ?? "http://localhost:5143";
+const ASSET_BASE_URL = getRequiredPublicEnv(
+  "NEXT_PUBLIC_API_ASSET_URL",
+  "http://localhost:5143",
+);
 
 const legacyProductImages: Record<string, string> = {
   "ducky.jpg": "/images/products/keyboard-base.jpg",
@@ -50,7 +51,8 @@ export function shouldBypassImageOptimization(src: string) {
 }
 
 async function publicFetch<T>(path: string, revalidate = 60): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${path}`, {
+  const apiBaseUrl = getRequiredServerEnv("API_BASE_URL", "http://localhost:5143");
+  const res = await fetch(`${apiBaseUrl}${path}`, {
     next: { revalidate },
   });
 
@@ -59,6 +61,34 @@ async function publicFetch<T>(path: string, revalidate = 60): Promise<T> {
   }
 
   return (await res.json()) as T;
+}
+
+function getRequiredServerEnv(name: string, fallback: string) {
+  const value = process.env[name];
+
+  if (value) {
+    return value;
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return fallback;
+}
+
+function getRequiredPublicEnv(name: string, fallback: string) {
+  const value = process.env[name];
+
+  if (value) {
+    return value;
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return fallback;
 }
 
 type ProductQuery = {

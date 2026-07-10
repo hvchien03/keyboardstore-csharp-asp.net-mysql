@@ -29,12 +29,12 @@ export default async function CheckoutPage() {
   return (
     <main className="mx-auto w-full max-w-[1200px] flex-grow px-4 py-10 md:px-8 md:py-16">
       <h1 className="mb-10 text-display-lg-mobile font-bold md:text-display-lg">
-        Thanh toan
+        Thanh toán
       </h1>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <section className="rounded-lg border border-border-subtle bg-surface-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] md:p-8 lg:col-span-7">
           <h2 className="mb-6 text-headline-md font-semibold">
-            Thong tin giao hang
+            Thông tin giao hàng
           </h2>
           <CheckoutForm cart={cart} />
         </section>
@@ -42,7 +42,7 @@ export default async function CheckoutPage() {
         <aside className="lg:col-span-5">
           <div className="sticky top-24 rounded-lg border border-border-subtle bg-surface-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] md:p-8">
             <h2 className="mb-6 border-b border-border-subtle pb-4 text-headline-md font-semibold">
-              Tom tat don hang
+              Tổng quan đơn hàng
             </h2>
             <div className="space-y-4">
               {cart.items.map((item) => (
@@ -76,7 +76,7 @@ export default async function CheckoutPage() {
             </div>
             <div className="my-6 border-t border-border-subtle" />
             <div className="flex justify-between text-headline-md font-semibold text-on-surface">
-              <span>Tong cong</span>
+              <span>Tổng cộng</span>
               <span>{formatCurrency(cart.totalAmount)}</span>
             </div>
           </div>

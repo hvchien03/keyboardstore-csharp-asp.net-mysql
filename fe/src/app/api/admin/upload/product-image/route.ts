@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAccessToken, toErrorResponse } from "@/lib/server-api";
-
-const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5143";
+import { API_BASE_URL } from "@/lib/env";
 
 export async function POST(req: NextRequest) {
   try {

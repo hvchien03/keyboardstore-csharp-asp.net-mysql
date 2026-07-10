@@ -10,6 +10,7 @@ namespace KeyboardStoreAPI.API.Data
             await CatalogSeeder.SeedAsync(context);
             await UserSeeder.SeedAsync(context);
             await ProductSeeder.SeedAsync(context);
+            await ProductImageBackfillSeeder.SeedAsync(context);
         }
     }
 }

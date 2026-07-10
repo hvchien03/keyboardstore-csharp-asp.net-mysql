@@ -24,7 +24,7 @@ export default async function OrdersPage() {
           My Orders
         </h1>
         <p className="text-body-md text-secondary">
-          Theo doi lich su mua hang va trang thai thanh toan.
+          Theo dõi lịch sử mua hàng và trạng thái thanh toán.
         </p>
       </div>
 
@@ -48,10 +48,10 @@ export default async function OrdersPage() {
         {orders.length === 0 ? (
           <div className="rounded-lg border border-border-subtle bg-surface-white p-10 text-center">
             <h2 className="mb-2 text-headline-md font-semibold">
-              Chua co don hang
+              Chưa có đơn hàng nào
             </h2>
             <Link className="text-primary-container hover:underline" href="/products">
-              Mua san pham dau tien
+              Mua sản phẩm đầu tiên
             </Link>
           </div>
         ) : (
@@ -91,7 +91,7 @@ export default async function OrdersPage() {
                   className="rounded border border-[#191919] px-5 py-2 text-center text-label-bold font-semibold text-on-surface"
                   href={`/account/orders/${order.id}`}
                 >
-                  Xem chi tiet
+                  Xem chi tiết
                 </Link>
               </div>
             </article>

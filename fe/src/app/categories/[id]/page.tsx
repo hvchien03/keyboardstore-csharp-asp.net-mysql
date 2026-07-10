@@ -83,7 +83,7 @@ export default async function CategoryProductsPage({
     <main className="mx-auto w-full max-w-container-max flex-grow px-margin-mobile py-section-padding md:px-8">
       <div className="mb-12">
         <p className="mb-3 text-label-bold font-semibold uppercase tracking-wide text-primary-container">
-          Danh muc
+          Danh mục
         </p>
         <h1 className="mb-4 text-display-lg-mobile font-bold text-on-surface md:text-display-lg">
           {category.name}
@@ -128,16 +128,16 @@ export default async function CategoryProductsPage({
         <section className="flex-1">
           <div className="mb-6 flex flex-col justify-between gap-3 border-b border-border-subtle pb-4 sm:flex-row sm:items-center">
             <span className="text-body-md text-secondary">
-              Hien thi {products.data.length} trong {products.totalCount} san pham
+              Hiển thị {products.data.length} trong {products.totalCount} sản phẩm
             </span>
             <Link
               className="text-label-bold font-semibold text-primary-container hover:underline"
               href="/products"
             >
-              Xem tat ca
+              Xem tất cả
             </Link>
             <label className="flex items-center gap-2 text-body-md text-secondary">
-              Sap xep theo:
+              Sắp xếp theo:
               <ProductSortSelect value={sortBy} />
             </label>
           </div>
@@ -149,7 +149,7 @@ export default async function CategoryProductsPage({
               ))
             ) : (
               <div className="rounded-lg border border-border-subtle bg-surface-white p-8 text-center text-secondary sm:col-span-2 lg:col-span-3">
-                Chua co san pham trong danh muc nay.
+                Chưa có sản phẩm trong danh mục này.
               </div>
             )}
           </div>

@@ -28,14 +28,14 @@ export default async function CartPage() {
             Shopping Cart
           </h1>
           <p className="mt-2 text-body-md text-secondary">
-            {cart.totalItems} san pham trong gio hang.
+            {cart.totalItems} sản phẩm trong giỏ hàng.
           </p>
         </div>
         <Link
           className="text-label-bold font-semibold text-primary-container hover:underline"
           href="/products"
         >
-          Tiep tuc mua sam
+          Tiếp tục mua sắm
         </Link>
       </div>
       <CartManager cart={cart} />

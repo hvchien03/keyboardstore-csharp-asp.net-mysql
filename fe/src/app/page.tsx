@@ -27,15 +27,15 @@ export default async function Home() {
         <div className="relative z-10 mx-auto w-full max-w-container-max px-gutter md:px-section-padding">
           <div className="max-w-lg">
             <span className="mb-4 inline-block rounded-full border border-border-subtle bg-surface-container-low px-3 py-1 text-label-sm font-medium uppercase tracking-wider text-secondary">
-              Phien ban gioi han
+              Phiên bản giới hạn
             </span>
             <h1 className="mb-6 text-display-lg-mobile font-bold text-on-surface md:text-display-lg">
-              Trai nghiem go phim tinh tuy.
+              Trải nghiệm gõ phím tinh tế.
             </h1>
             <p className="mb-8 text-body-lg text-secondary">
-              Kham pha bo suu tap ban phim co custom cao cap moi nhat.
-              Thiet ke nguyen khoi, trai nghiem go dinh cao, phong cach toi
-              gian.
+              Khám phá bộ sưu tập bàn phím cơ custom cao cấp mới nhất.
+              Thiết kế nguyên khối, trải nghiệm gõ định cao, phong cách tối
+              giản.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -48,7 +48,7 @@ export default async function Home() {
                 className="rounded border border-on-background px-8 py-3 text-label-bold font-semibold text-on-background transition-colors hover:bg-surface-container-low"
                 href="/products"
               >
-                Tim hieu them
+                Tìm hiểu thêm
               </Link>
             </div>
           </div>
@@ -58,7 +58,7 @@ export default async function Home() {
       <section className="bg-background py-section-padding">
         <div className="mx-auto w-full max-w-container-max px-gutter md:px-0">
           <h2 className="mb-12 text-center text-headline-md font-semibold text-on-surface">
-            Danh muc noi bat
+            Danh mục nổi bật
           </h2>
           <div className="grid grid-cols-1 gap-gutter md:h-[500px] md:grid-cols-12">
             <Link
@@ -78,7 +78,7 @@ export default async function Home() {
                   Custom Build
                 </h3>
                 <p className="flex items-center text-body-md text-on-primary/85">
-                  Kham pha the gioi sang tao
+                  Khám phá thế giới sáng tạo
                   <ArrowRight className="ml-2" size={16} />
                 </p>
               </div>
@@ -104,13 +104,13 @@ export default async function Home() {
         <div className="mx-auto w-full max-w-container-max px-gutter md:px-0">
           <div className="mb-12 flex items-end justify-between border-b border-border-subtle pb-4">
             <h2 className="text-headline-md font-semibold text-on-surface">
-              San pham moi nhat
+              Sản phẩm mới nhất
             </h2>
             <Link
               className="flex items-center text-label-bold font-semibold text-secondary transition-colors hover:text-primary-container"
               href="/products"
             >
-              Xem tat ca <ArrowRight className="ml-1" size={16} />
+              Xem tất cả <ArrowRight className="ml-1" size={16} />
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-4">

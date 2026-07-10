@@ -13,6 +13,9 @@ const navItems = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 bg-surface-white/95 backdrop-blur-md">
+      <div className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-label-sm text-amber-900 md:px-8">
+        Đây là website thử nghiệm. Vui lòng sử dụng tài khoản demo để trải nghiệm.
+      </div>
       <nav className="mx-auto flex w-full max-w-[1440px] items-center justify-between border-b border-border-subtle px-4 py-4 shadow-sm md:px-8">
         <Link
           className="text-headline-md font-bold tracking-tight text-on-surface"
@@ -38,7 +41,7 @@ export function SiteHeader() {
             <input
               className="h-9 w-44 rounded-full border border-border-subtle bg-surface-white px-3 text-sm text-on-surface outline-none focus:border-primary-container"
               name="keyword"
-              placeholder="Tim san pham"
+              placeholder="Tìm sản phẩm"
               type="search"
             />
             <button aria-label="Tim kiem" className="transition-transform hover:scale-95" type="submit">
@@ -46,7 +49,7 @@ export function SiteHeader() {
             </button>
           </form>
           <form action="/products" className="md:hidden" method="get">
-            <input className="sr-only" name="keyword" placeholder="Tim san pham" type="search" />
+            <input className="sr-only" name="keyword" placeholder="Tìm sản phẩm" type="search" />
             <button aria-label="Tim kiem" className="transition-transform hover:scale-95" type="submit">
               <Search size={22} />
             </button>

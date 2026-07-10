@@ -11,16 +11,16 @@ namespace KeyboardStoreAPI.API.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private const string FrontendPaymentSuccessUrl = "http://localhost:3000/payment/success";
-        private const string FrontendPaymentFailedUrl = "http://localhost:3000/payment/failed";
-
+        private readonly IConfiguration _configuration;
         private readonly IPaymentService _paymentService;
         private readonly IOrderService _orderService;
 
         public PaymentController(
+            IConfiguration configuration,
             IPaymentService paymentService,
             IOrderService orderService)
         {
+            _configuration = configuration;
             _paymentService = paymentService;
             _orderService = orderService;
         }
@@ -47,9 +47,10 @@ namespace KeyboardStoreAPI.API.Controllers
         public async Task<IActionResult> VNPayReturn()
         {
             var response = await _paymentService.ProcessVNPayReturn(Request.Query);
-            var baseUrl = response.Success ? FrontendPaymentSuccessUrl : FrontendPaymentFailedUrl;
+            var frontendBaseUrl = GetRequiredSetting("AppSettings:FrontendBaseUrl").TrimEnd('/');
+            var paymentPath = response.Success ? "/payment/success" : "/payment/failed";
 
-            return Redirect($"{baseUrl}?orderId={response.OrderId}");
+            return Redirect($"{frontendBaseUrl}{paymentPath}?orderId={response.OrderId}");
         }
 
         [HttpGet("vnpay-ipn")]
@@ -93,6 +94,18 @@ namespace KeyboardStoreAPI.API.Controllers
             }
 
             return int.Parse(userId);
+        }
+
+        private string GetRequiredSetting(string key)
+        {
+            var value = _configuration[key];
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException($"Configuration value '{key}' is missing");
+            }
+
+            return value;
         }
     }
 }

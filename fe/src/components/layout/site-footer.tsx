@@ -22,12 +22,12 @@ export function SiteFooter() {
 
         <div className="flex flex-col gap-4">
           <h4 className="mb-2 text-label-bold font-semibold uppercase tracking-wide text-on-surface">
-            Ban tin
+            Bản tin
           </h4>
           <form className="flex">
             <input
               className="w-full rounded-l-md border border-border-subtle bg-surface-white px-4 py-2 text-body-md outline-none transition-colors focus:border-primary-container"
-              placeholder="Email cua ban"
+              placeholder="Email của bạn"
               type="email"
             />
             <button

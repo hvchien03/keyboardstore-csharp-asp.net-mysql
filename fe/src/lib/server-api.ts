@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import type { ApiError, AuthResponse } from "@/types/api";
+import { API_BASE_URL } from "@/lib/env";
 
-const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5143";
 const AUTH_COOKIE_NAME = process.env.AUTH_COOKIE_NAME ?? "keyboard_access_token";
 const REFRESH_COOKIE_NAME =
   process.env.REFRESH_COOKIE_NAME ?? "keyboard_refresh_token";

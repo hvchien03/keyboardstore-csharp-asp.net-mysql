@@ -8,7 +8,7 @@ export default function PaymentFailedPage() {
       <div>
         <h1 className="text-2xl font-bold">Thanh toan that bai</h1>
         <p className="mt-2 text-secondary">
-          Giao dich khong thanh cong. Vui long thu lai.
+          Giao dịch không thành công. Vui lòng thử lại.
         </p>
       </div>
       <div className="flex gap-3">
@@ -16,10 +16,10 @@ export default function PaymentFailedPage() {
           className="rounded-md bg-primary-container px-5 py-2.5 text-sm font-medium text-on-primary"
           href="/checkout"
         >
-          Thu lai
+          Thử lại
         </Link>
         <Link className="rounded-md border px-5 py-2.5 text-sm font-medium" href="/cart">
-          Quay lai gio hang
+          Quay lại giỏ hàng
         </Link>
       </div>
     </main>

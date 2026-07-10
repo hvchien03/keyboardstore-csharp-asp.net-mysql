@@ -248,7 +248,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             var apiBaseUrl = _configuration["AppSettings:ApiBaseUrl"];
             if (string.IsNullOrWhiteSpace(apiBaseUrl))
             {
-                apiBaseUrl = "http://localhost:5143";
+                throw new InvalidOperationException("Configuration value 'AppSettings:ApiBaseUrl' is missing");
             }
 
             return $"{apiBaseUrl.TrimEnd('/')}/api/Auth/verify-email?email={WebUtility.UrlEncode(email)}&token={WebUtility.UrlEncode(token)}";

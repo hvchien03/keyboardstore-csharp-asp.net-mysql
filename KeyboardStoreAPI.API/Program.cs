@@ -6,7 +6,9 @@ using KeyboardStoreAPI.API.Repositories.Interfaces;
 using KeyboardStoreAPI.API.Services.Implementations;
 using KeyboardStoreAPI.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using Serilog;
@@ -84,6 +86,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -120,9 +123,19 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("ConfiguredOrigins", policy =>
     {
-        policy.AllowAnyOrigin()
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>()
+            ?? Array.Empty<string>();
+
+        if (allowedOrigins.Length == 0)
+        {
+            throw new InvalidOperationException("Configuration value 'Cors:AllowedOrigins' is missing");
+        }
+
+        policy.WithOrigins(allowedOrigins)
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
@@ -151,9 +164,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseStaticFiles();
-app.UseCors("AllowAll");
+UseConfiguredUploadStaticFiles(app, builder.Configuration);
+app.UseCors("ConfiguredOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
@@ -168,7 +186,9 @@ static void ValidateRequiredConfiguration(IConfiguration configuration)
         "EmailSettings:Username",
         "EmailSettings:Password",
         "VNPaySettings:TmnCode",
-        "VNPaySettings:HashSecret"
+        "VNPaySettings:HashSecret",
+        "AppSettings:ApiBaseUrl",
+        "AppSettings:FrontendBaseUrl"
     };
 
     foreach (var key in requiredKeys)
@@ -187,4 +207,28 @@ static string GetRequiredConfigurationValue(IConfiguration configuration, string
     }
 
     return value;
+}
+
+static void UseConfiguredUploadStaticFiles(WebApplication app, IConfiguration configuration)
+{
+    var uploadSettings = configuration.GetSection("UploadSettings");
+    var rootPath = uploadSettings["RootPath"];
+    var requestPath = uploadSettings["RequestPath"] ?? "/uploads";
+
+    if (string.IsNullOrWhiteSpace(rootPath))
+    {
+        return;
+    }
+
+    var resolvedRootPath = Path.IsPathRooted(rootPath)
+        ? rootPath
+        : Path.Combine(app.Environment.ContentRootPath, rootPath);
+
+    Directory.CreateDirectory(resolvedRootPath);
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(resolvedRootPath),
+        RequestPath = requestPath
+    });
 }

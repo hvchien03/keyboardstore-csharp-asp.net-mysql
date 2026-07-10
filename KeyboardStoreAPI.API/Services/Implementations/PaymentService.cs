@@ -15,6 +15,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
         private readonly IConfiguration _configuration;
         private readonly IOrderRepository _orderRepository;
         private readonly ICartRepository _cartRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<PaymentService> _logger;
         private readonly IEmailService _emailService;
 
@@ -22,12 +23,14 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             IConfiguration configuration,
             IOrderRepository orderRepository,
             ICartRepository cartRepository,
+            IHttpContextAccessor httpContextAccessor,
             ILogger<PaymentService> logger,
             IEmailService emailService)
         {
             _configuration = configuration;
             _orderRepository = orderRepository;
             _cartRepository = cartRepository;
+            _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _emailService = emailService;
         }
@@ -53,7 +56,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             vnpay.AddRequestData("vnp_Amount", ConvertToVNPayAmount(amount));
             vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", currencyCode);
-            vnpay.AddRequestData("vnp_IpAddr", "127.0.0.1");
+            vnpay.AddRequestData("vnp_IpAddr", GetClientIpAddress());
             vnpay.AddRequestData("vnp_Locale", locale);
             vnpay.AddRequestData("vnp_OrderInfo", orderInfo);
             vnpay.AddRequestData("vnp_OrderType", "other");
@@ -252,6 +255,12 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             }
 
             return value;
+        }
+
+        private string GetClientIpAddress()
+        {
+            return _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString()
+                ?? "127.0.0.1";
         }
 
         private static void ValidateWholeVNPayAmount(decimal amount)

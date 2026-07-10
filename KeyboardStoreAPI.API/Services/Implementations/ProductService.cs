@@ -292,7 +292,11 @@ namespace KeyboardStoreAPI.API.Services.Implementations
                 throw new NotFoundException("Product image not found");
             }
 
-            await _uploadService.DeleteProductImageAsync(imageUrl);
+            if (!await _productRepository.IsImageUrlInUseAsync(imageUrl))
+            {
+                await _uploadService.DeleteProductImageAsync(imageUrl);
+            }
+
             await _cacheService.RemoveAsync(_productsCacheKey);
             await _cacheService.RemoveAsync($"{_productCachePrefix}{id}");
 

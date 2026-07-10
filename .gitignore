@@ -6,6 +6,7 @@ artifacts/
 # Logs and runtime files
 Logs/
 *.log
+KeyboardStoreAPI.API/wwwroot/uploads/
 
 # Local secrets/config
 appsettings.Local.json

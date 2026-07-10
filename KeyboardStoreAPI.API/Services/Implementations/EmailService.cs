@@ -26,7 +26,7 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             var template = await File.ReadAllTextAsync("Templates/Email/WelcomeEmail.html");
             var body = template
                 .Replace("{{UserEmail}}", toEmail)
-                .Replace("{{SiteUrl}}", "http://localhost:3000");
+                .Replace("{{SiteUrl}}", GetRequiredConfigurationValue("AppSettings:FrontendBaseUrl"));
 
             await SendEmailAsync(toEmail, "Chào mừng đến Keyboard Store!", body);
         }
@@ -128,6 +128,18 @@ namespace KeyboardStoreAPI.API.Services.Implementations
             if (string.IsNullOrWhiteSpace(value))
             {
                 throw new InvalidOperationException($"Email setting '{key}' is missing");
+            }
+
+            return value;
+        }
+
+        private string GetRequiredConfigurationValue(string key)
+        {
+            var value = _configuration[key];
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException($"Configuration value '{key}' is missing");
             }
 
             return value;

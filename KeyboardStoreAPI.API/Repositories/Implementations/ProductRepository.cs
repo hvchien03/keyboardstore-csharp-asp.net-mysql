@@ -276,6 +276,12 @@ namespace KeyboardStoreAPI.API.Repositories.Implementations
                 .FirstOrDefaultAsync(image => image.ProductId == productId && image.Id == imageId);
         }
 
+        public async Task<bool> IsImageUrlInUseAsync(string imageUrl)
+        {
+            return await _context.ProductImages
+                .AnyAsync(image => image.ImageUrl == imageUrl);
+        }
+
         public async Task<bool> DeleteImageAsync(int productId, int imageId)
         {
             var product = await GetByIdAsync(productId);

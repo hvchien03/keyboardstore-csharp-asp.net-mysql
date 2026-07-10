@@ -14,7 +14,7 @@ export default async function PaymentSuccessPage({
       <div>
         <h1 className="text-2xl font-bold">Thanh toan thanh cong!</h1>
         <p className="mt-2 text-secondary">
-          Don hang #{orderId ?? ""} cua ban da duoc xac nhan.
+          Đơn hàng #{orderId ?? ""} của bạn đã được xác nhận.
         </p>
       </div>
       <div className="flex gap-3">
@@ -23,14 +23,14 @@ export default async function PaymentSuccessPage({
             className="rounded-md bg-primary-container px-5 py-2.5 text-sm font-medium text-on-primary"
             href={`/account/orders/${orderId}`}
           >
-            Xem don hang
+            Xem đơn hàng
           </Link>
         ) : null}
         <Link
           className="rounded-md border px-5 py-2.5 text-sm font-medium"
           href="/"
         >
-          Tiep tuc mua sam
+          Tiếp tục mua sắm
         </Link>
       </div>
     </main>

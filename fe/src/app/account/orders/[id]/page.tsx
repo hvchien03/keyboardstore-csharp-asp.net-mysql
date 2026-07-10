@@ -32,7 +32,7 @@ export default async function OrderDetailPage({
     <main className="mx-auto w-full max-w-container-max flex-grow px-margin-mobile py-section-padding md:px-gutter">
       {status === "confirmed" ? (
         <div className="mb-8 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
-          Don hang da duoc tao thanh cong.
+          Đơn hàng đã được tạo thành công.
         </div>
       ) : null}
       <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
@@ -48,7 +48,7 @@ export default async function OrderDetailPage({
           className="rounded border border-on-surface px-5 py-2 text-label-bold font-semibold text-on-surface"
           href="/account/orders"
         >
-          Quay lai
+          Quay lại
         </Link>
       </div>
 
@@ -74,13 +74,13 @@ export default async function OrderDetailPage({
 
         <aside className="space-y-gutter lg:col-span-4">
           <section className="rounded-lg border border-border-subtle bg-surface-white p-6">
-            <h2 className="mb-4 text-headline-md font-semibold">Tong ket</h2>
+            <h2 className="mb-4 text-headline-md font-semibold">Tổng kết</h2>
             <Info label="Trang thai" value={order.status} />
             <Info label="Thanh toan" value={`${order.paymentMethod} · ${order.paymentStatus}`} />
             <Info label="Tong tien" value={formatCurrency(order.totalAmount)} />
           </section>
           <section className="rounded-lg border border-border-subtle bg-surface-white p-6">
-            <h2 className="mb-4 text-headline-md font-semibold">Giao hang</h2>
+            <h2 className="mb-4 text-headline-md font-semibold">Giao hàng</h2>
             <Info label="Nguoi nhan" value={order.shippingName} />
             <Info label="Dien thoai" value={order.shippingPhone} />
             <Info label="Dia chi" value={order.shippingAddress} />

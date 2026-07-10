@@ -25,17 +25,17 @@ export default async function AccountPage() {
       <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h1 className="text-headline-md font-semibold text-on-surface">
-            Tai khoan cua toi
+            Tài khoản của tôi
           </h1>
           <p className="mt-2 text-body-md text-secondary">
-            Quan ly ho so, don hang va tuy chon mua sam.
+            Quản lý hồ sơ, đơn hàng và tùy chọn mua sắm.
           </p>
         </div>
         <Link
           className="rounded border border-on-surface px-5 py-2 text-label-bold font-semibold text-on-surface"
           href="/account/orders"
         >
-          Xem don hang
+          Xem đơn hàng
         </Link>
       </div>
 
@@ -43,10 +43,10 @@ export default async function AccountPage() {
         <aside className="rounded-lg border border-border-subtle bg-surface-white p-4 shadow-[0_4px_20px_rgba(0,0,0,0.02)] md:col-span-3">
           <nav className="flex flex-col gap-1">
             <Link className="rounded bg-surface-container-low px-4 py-3 text-label-bold font-semibold text-primary-container" href="/account">
-              Ho so
+              Hồ sơ
             </Link>
             <Link className="rounded px-4 py-3 text-label-bold font-semibold text-secondary hover:bg-surface-container-low" href="/account/orders">
-              Don hang
+              Đơn hàng
             </Link>
           </nav>
         </aside>
@@ -78,7 +78,7 @@ export default async function AccountPage() {
             <div className="mb-6 flex items-center gap-2 border-b border-border-subtle pb-4">
               <Mail className="text-primary-container" size={20} />
               <h3 className="text-label-bold font-semibold uppercase tracking-wide text-on-surface">
-                Thong tin lien he
+                Thông tin liên hệ
               </h3>
             </div>
             <ProfileForm user={user} />

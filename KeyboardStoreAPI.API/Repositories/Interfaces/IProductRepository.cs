@@ -12,6 +12,7 @@ namespace KeyboardStoreAPI.API.Repositories.Interfaces
         Task<Product> UpdateAsync(Product product);
         Task<Product> AddImagesAsync(int productId, IEnumerable<ProductImage> images);
         Task<ProductImage?> GetImageAsync(int productId, int imageId);
+        Task<bool> IsImageUrlInUseAsync(string imageUrl);
         Task<bool> DeleteImageAsync(int productId, int imageId);
         Task<bool> DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
