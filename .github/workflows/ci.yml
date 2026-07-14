@@ -1,17 +1,59 @@
 name: CI - Build and Push Docker Images
 
+# Chỉ chạy khi có code được push lên branch devops
 on:
   push:
     branches:
       - devops
 
+# Biến dùng chung cho toàn bộ workflow
+env:
+  VERSION: v0.0.1
+
 jobs:
   build:
+    # GitHub tạo một máy Ubuntu tạm thời để thực hiện workflow
     runs-on: ubuntu-latest
 
     steps:
+
+      # Clone source code từ GitHub về GitHub Runner
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Show files
-        run: ls -R
+      # Đăng nhập Harbor bằng Secret
+      - name: Login to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.HARBOR_REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      # Build Docker Image Backend
+      # registry.domain.vn/keyboardstore/backend:v0.1
+      - name: Build Backend Image
+        run: |
+          docker build \
+            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:${{ env.VERSION }} \
+            -f KeyboardStoreAPI.API/Dockerfile \
+            .
+
+      # Push Backend Image lên Harbor
+      - name: Push Backend Image
+        run: |
+          docker push \
+            ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:${{ env.VERSION }}
+
+      # Build Docker Image Frontend
+      - name: Build Frontend Image
+        run: |
+          docker build \
+            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:${{ env.VERSION }} \
+            -f fe/Dockerfile \
+            .
+
+      # Push Frontend Image lên Harbor
+      - name: Push Frontend Image
+        run: |
+          docker push \
+            ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:${{ env.VERSION }}
