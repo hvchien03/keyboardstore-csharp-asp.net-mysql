@@ -12,6 +12,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using Serilog;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -143,20 +144,46 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     try
+//     {
+//         var context = services.GetRequiredService<ApplicationDbContext>();
+//         await DbInitializer.SeedAsync(context);
+//     }
+//     catch (Exception exception)
+//     {
+//         var logger = services.GetRequiredService<ILogger<Program>>();
+//         logger.LogError(exception, "An error occurred while seeding the database.");
+//     }
+// }
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
+
+        // Tự động chạy migration
+        await context.Database.MigrateAsync();
+
+        // Seed dữ liệu mặc định
         await DbInitializer.SeedAsync(context);
     }
     catch (Exception exception)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(exception, "An error occurred while seeding the database.");
+
+        logger.LogError(
+            exception,
+            "An error occurred while migrating/seeding the database.");
     }
 }
+// block trên đang được sử dụng để tự động chạy migration và seed dữ liệu mặc định khi ứng dụng khởi động. 
+// Nếu có lỗi xảy ra trong quá trình này, nó sẽ được ghi lại bằng logger.
+
 
 if (app.Environment.IsDevelopment())
 {

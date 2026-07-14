@@ -1,0 +1,17 @@
+name: CI - Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - devops
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Show files
+        run: ls -R
