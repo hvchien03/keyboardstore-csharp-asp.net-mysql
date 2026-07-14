@@ -50,7 +50,7 @@ jobs:
           docker build \
             -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:${{ env.VERSION }} \
             -f fe/Dockerfile \
-            .
+            fe
 
       # Push Frontend Image lên Harbor
       - name: Push Frontend Image
