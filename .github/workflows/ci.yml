@@ -1,27 +1,23 @@
-name: CI - Build and Push Docker Images
+name: CI/CD - Build, Push & Deploy
 
-# Chỉ chạy khi có code được push lên branch devops
 on:
   push:
     branches:
       - devops
 
-# Biến dùng chung cho toàn bộ workflow
 env:
-  VERSION: v0.0.1
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
-  build:
-    # GitHub tạo một máy Ubuntu tạm thời để thực hiện workflow
+  # ============================
+  # JOB 1: Build & Push images
+  # ============================
+  build-and-push:
     runs-on: ubuntu-latest
-
     steps:
-
-      # Clone source code từ GitHub về GitHub Runner
       - name: Checkout source
         uses: actions/checkout@v4
 
-      # Đăng nhập Harbor bằng Secret
       - name: Login to Harbor
         uses: docker/login-action@v3
         with:
@@ -29,31 +25,69 @@ jobs:
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_PASSWORD }}
 
-      # Build Docker Image Backend
-      # registry.domain.vn/keyboardstore/backend:v0.1
+      # ---------- Backend ----------
       - name: Build Backend Image
         run: |
           docker build \
-            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:${{ env.VERSION }} \
+            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:${{ env.IMAGE_TAG }} \
+            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:latest \
             -f KeyboardStoreAPI.API/Dockerfile \
             .
 
-      # Push Backend Image lên Harbor
       - name: Push Backend Image
         run: |
-          docker push \
-            ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:${{ env.VERSION }}
+          docker push ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:${{ env.IMAGE_TAG }}
+          docker push ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/backend:latest
 
-      # Build Docker Image Frontend
+      # ---------- Frontend ----------
       - name: Build Frontend Image
         run: |
           docker build \
-            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:${{ env.VERSION }} \
+            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:${{ env.IMAGE_TAG }} \
+            -t ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:latest \
             -f fe/Dockerfile \
+            --build-arg NEXT_PUBLIC_SITE_URL=${{ vars.FRONTEND_BASE_URL }} \
+            --build-arg API_BASE_URL=http://backend:8080 \
+            --build-arg NEXT_PUBLIC_API_ASSET_URL=${{ vars.FRONTEND_BASE_URL }} \
+            --build-arg NEXT_PUBLIC_ENABLE_VNPAY=${{ vars.NEXT_PUBLIC_ENABLE_VNPAY }} \
             fe
 
-      # Push Frontend Image lên Harbor
       - name: Push Frontend Image
         run: |
-          docker push \
-            ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:${{ env.VERSION }}
+          docker push ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:${{ env.IMAGE_TAG }}
+          docker push ${{ secrets.HARBOR_REGISTRY }}/keyboardstore/frontend:latest
+
+  # ============================
+  # JOB 2: Deploy len VPS
+  # ============================
+  # deploy:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy to VPS via SSH
+  #       uses: appleboy/ssh-action@v1.0.3
+  #       with:
+  #         host: ${{ secrets.VPS_HOST }}
+  #         username: ${{ secrets.VPS_USERNAME }}
+  #         key: ${{ secrets.VPS_SSH_KEY }}
+  #         script: |
+  #           set -e
+  #           cd ${{ secrets.VPS_DEPLOY_PATH }}
+
+  #           echo "Pulling latest code (docker-compose.yml, nginx config...)"
+  #           git pull origin devops
+
+  #           echo "Logging in to Harbor"
+  #           echo "${{ secrets.HARBOR_PASSWORD }}" | docker login ${{ secrets.HARBOR_REGISTRY }} \
+  #             -u "${{ secrets.HARBOR_USERNAME }}" --password-stdin
+
+  #           cd deploy
+
+  #           echo "Pulling latest images"
+  #           IMAGE_TAG=${{ env.IMAGE_TAG }} docker compose pull backend frontend
+
+  #           echo "Restarting services with new images"
+  #           IMAGE_TAG=${{ env.IMAGE_TAG }} docker compose up -d --remove-orphans
+
+  #           echo "Cleaning up old images"
+  #           docker image prune -f
