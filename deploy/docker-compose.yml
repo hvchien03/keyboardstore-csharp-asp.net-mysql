@@ -49,9 +49,7 @@ services:
     container_name: keyboardstore-backend
     restart: unless-stopped
 
-    build:
-      context: ..
-      dockerfile: KeyboardStoreAPI.API/Dockerfile
+    image: ${HARBOR_REGISTRY}/keyboardstore/backend:${IMAGE_TAG:-latest}
 
     depends_on:
       db:
@@ -103,15 +101,11 @@ services:
     container_name: keyboardstore-frontend
     restart: unless-stopped
 
-    build:
-      context: ../fe
-      dockerfile: Dockerfile
+    image: ${HARBOR_REGISTRY}/keyboardstore/frontend:${IMAGE_TAG:-latest}
 
-      args:
-        NEXT_PUBLIC_SITE_URL: ${FRONTEND_BASE_URL}
-        API_BASE_URL: http://backend:8080
-        NEXT_PUBLIC_API_ASSET_URL: ${FRONTEND_BASE_URL}
-        NEXT_PUBLIC_ENABLE_VNPAY: "true"
+    environment:
+      # Biến server-side, đọc lúc runtime (không bị bake vào build như NEXT_PUBLIC_*)
+      API_BASE_URL: http://backend:8080
 
     depends_on:
       backend:
