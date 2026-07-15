@@ -104,8 +104,11 @@ services:
     image: ${HARBOR_REGISTRY}/keyboardstore/frontend:${IMAGE_TAG:-latest}
 
     environment:
-      # Biến server-side, đọc lúc runtime (không bị bake vào build như NEXT_PUBLIC_*)
+      # Cac bien nay duoc code doc dong (process.env[name]) trong src/lib/env.ts,
+      # nen KHONG duoc Next.js bake san luc build - phai cung cap lai luc runtime.
       API_BASE_URL: http://backend:8080
+      NEXT_PUBLIC_API_ASSET_URL: ${FRONTEND_BASE_URL}
+      NEXT_PUBLIC_SITE_URL: ${FRONTEND_BASE_URL}
 
     depends_on:
       backend:
