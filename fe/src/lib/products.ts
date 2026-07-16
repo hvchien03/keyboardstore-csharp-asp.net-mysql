@@ -7,10 +7,15 @@ import type {
   SwitchType,
 } from "@/types/api";
 
-const ASSET_BASE_URL = getRequiredPublicEnv(
-  "NEXT_PUBLIC_API_ASSET_URL",
-  "http://localhost:5143",
-);
+// QUAN TRONG: dung truy cap TINH (process.env.NEXT_PUBLIC_...) thay vi
+// getRequiredPublicEnv("NEXT_PUBLIC_...") (truy cap dong qua process.env[name]).
+// Bien nay duoc dung ca trong Client Component (vd product-gallery.tsx), ma
+// Next.js CHI bake gia tri NEXT_PUBLIC_* vao bundle trinh duyet khi code truy
+// cap tinh nhu the nay. Truy cap dong se luon la `undefined` khi chay trong
+// trinh duyet (process.env khong ton tai that o client), gay loi ngay sau khi
+// hydrate xong du server render dung.
+const ASSET_BASE_URL =
+  process.env.NEXT_PUBLIC_API_ASSET_URL || "http://localhost:5143";
 
 const legacyProductImages: Record<string, string> = {
   "ducky.jpg": "/images/products/keyboard-base.jpg",
@@ -64,20 +69,6 @@ async function publicFetch<T>(path: string, revalidate = 60): Promise<T> {
 }
 
 function getRequiredServerEnv(name: string, fallback: string) {
-  const value = process.env[name];
-
-  if (value) {
-    return value;
-  }
-
-  if (process.env.NODE_ENV === "production") {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-
-  return fallback;
-}
-
-function getRequiredPublicEnv(name: string, fallback: string) {
   const value = process.env[name];
 
   if (value) {
