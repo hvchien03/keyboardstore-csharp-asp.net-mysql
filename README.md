@@ -441,6 +441,7 @@ Default admin:
 
 ```text
 admin@keyboardstore.com / Admin@123
+demo@keyboardstore.com / Demo@123
 ```
 
 Seeded admin is email-verified.
